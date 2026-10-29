@@ -78,7 +78,7 @@ SHA-256 là dấu kiểm toàn vẹn; thiếu chữ ký số thì không chứng
 
 Upstream: https://github.com/xulytiengviet/rul (Rul v0.1; package tại https://github.com/rul-lang/rul được nêu trong metadata). RUL là SSA-DAG nhị phân 128-bit và verifier $O(N)$ cho hình dạng DAG, bounds, capabilities, ownership. Các đối tượng này kiểm chứng **an toàn đồ thị**, không kiểm chứng Unicode hay đơn ánh CVNSS.
 
-`rul-bridge/` phụ thuộc RUL git pin `796d465773664f09bb415f35465d9df6bb4435d9`, dùng API `SymbolicGraphBuilder`, `verify_program`, `to_rl_bytes/from_rl_bytes`, và Tier0/Tier1/Tier2 để thực thi đồ thị tính `d - 13 + 13 = d` trên cột 32 phần tử gồm 27 chữ số 0..26 và 5 phần tử đệm. Tổng phải bằng 351. Đây là phép đối chiếu số học RUL, **không phải** đồ thị chứng minh tam phân/Unicode đầy đủ.
+`rul-bridge/` phụ thuộc RUL git pin `796d465773664f09bb415f35465d9df6bb4435d9`, dùng API `SymbolicGraphBuilder`, `verify_program`, `to_rl_bytes/from_rl_bytes`, và Tier0/Tier1/Tier2 để thực thi đồ thị tính `13 + 9*t2 + 3*t1 + t0 = d` trên bốn cột 32 phần tử gồm 27 chữ số 0..26 và 5 hàng đệm hợp lệ. Tổng bình phương sai số phải bằng 0, kiểm tra cả Tier 0, 1 và 2. Đây là phép đối chiếu số học RUL, **không phải** đồ thị chứng minh tam phân/Unicode đầy đủ.
 
 Website mô phỏng các tier bằng JavaScript và ghi rõ đây là *mô phỏng*, trong khi GitHub Actions chạy crate Rust thật. Các số liệu GB/s trên README RUL đo các pipeline số học không được suy rộng sang huấn luyện LLM.
 
