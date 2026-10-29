@@ -1,0 +1,9 @@
+[package]
+name = "thuyettamphan-rul-proof"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "RUL verified binary graph that preserves Base27 digit values via numeric transform"
+
+[dependencies]
+rul = { git = "https://github.com/xulytiengviet/rul", rev = "796d465773664f09bb415f35465d9df6bb4435d9" }
