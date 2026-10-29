@@ -148,3 +148,61 @@ async function browserProofSuite(){
 }
 $("runTestsBtn").addEventListener("click",browserProofSuite);
 runLossless();
+
+/**
+ * Bài toán 1 comparison. Each metric uses a separate axis and denominator.
+ * This compares LOGICAL radix representations, never electrical energy.
+ */
+function leastDigits(base,n){
+  let capacity=1, digits=0;
+  while(capacity<n){capacity*=base;digits++}
+  return {digits,capacity};
+}
+function renderBinaryTernaryChart(){
+  const count=Number($("stateTarget").value);
+  if(!Number.isInteger(count)||count<2||count>81)return;
+  const bi=leastDigits(2,count),tri=leastDigits(3,count);
+  const ratioB=100*count/bi.capacity,ratioT=100*count/tri.capacity;
+  const fmt=n=>Number(n).toLocaleString("vi-VN",{maximumFractionDigits:3});
+  const metrics=[
+    {title:"01 · Số chữ số mã cố định",description:"Độ dài nhỏ nhất để chứa đủ N ký hiệu trong từng hệ cơ số; bit và trit là hai đơn vị khác nhau.",
+      b:bi.digits,t:tri.digits,unitB:"bit",unitT:"trit",max:Math.max(bi.digits,tri.digits)},
+    {title:"02 · Số mã khả dụng",description:"Mỗi mã có độ dài cố định: 2^b trạng thái nhị phân và 3^t trạng thái tam phân.",
+      b:bi.capacity,t:tri.capacity,unitB:"mã",unitT:"mã",max:Math.max(bi.capacity,tri.capacity)},
+    {title:"03 · Tỷ lệ sử dụng miền mã",description:"Phần trăm số mã được dùng so với khả năng chứa; chưa tính overhead, escape và lưu trữ vật lý.",
+      b:ratioB,t:ratioT,unitB:"%",unitT:"%",max:100}
+  ];
+  const bars=metrics.map(row=>{
+    const bar=(name,value,unit,max,type)=>`<div class="chart-row">
+      <span class="chart-label">${name}</span>
+      <div class="chart-bar-wrap" role="img" aria-label="${name}: ${fmt(value)} ${unit}">
+        <div class="chart-bar ${type}" style="width:${Math.max(0,Math.min(100,value/max*100))}%"></div>
+      </div>
+      <span class="chart-value">${fmt(value)} ${unit}</span>
+    </div>`;
+    return `<div class="chart-group"><h4>${row.title}</h4>
+      ${bar("Nhị phân",row.b,row.unitB,row.max,"binary")}
+      ${bar("Tam phân",row.t,row.unitT,row.max,"ternary")}
+      <p class="chart-description">${row.description}</p></div>`;
+  }).join("");
+  $("compareChart").innerHTML=bars;
+  set("stateTargetLabel",count);
+  set("compareBinaryValue",bi.digits+" bit");
+  set("compareTernaryValue",tri.digits+" trit");
+  set("compareBinarySpace",fmt(bi.capacity)+" mã khả dụng");
+  set("compareTernarySpace",fmt(tri.capacity)+" mã khả dụng");
+  set("compareBitsCell",bi.digits+" bit");
+  set("compareTritsCell",tri.digits+" trit");
+  set("compareBinaryCapacity",fmt(bi.capacity));
+  set("compareTernaryCapacity",fmt(tri.capacity));
+  set("compareBinaryUse",fmt(ratioB)+"%");
+  set("compareTernaryUse",fmt(ratioT)+"%");
+  set("compareBinaryWaste",fmt(bi.capacity-count));
+  set("compareTernaryWaste",fmt(tri.capacity-count));
+  set("compareFinding",count===27
+    ?"Với 27 ký hiệu: 5 bit tạo 32 mã (dư 5; sử dụng 84,375%), trong khi 3 trit tạo chính xác 27 mã (dư 0; sử dụng 100%). Đây là lợi ích về độ khít trạng thái, chưa phải bằng chứng tiết kiệm điện."
+    :`Với ${count} ký hiệu: nhị phân cần ${bi.digits} bit, tam phân cần ${tri.digits} trit. Tỷ lệ sử dụng lần lượt là ${fmt(ratioB)}% và ${fmt(ratioT)}%. Tỷ lệ nào lớn hơn phụ thuộc N; kết quả không chứng minh hiệu năng phần cứng.`);
+}
+$("stateTarget").addEventListener("input",renderBinaryTernaryChart);
+$("resetCompare").addEventListener("click",()=>{$("stateTarget").value="27";renderBinaryTernaryChart()});
+renderBinaryTernaryChart();
