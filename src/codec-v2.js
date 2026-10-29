@@ -8,6 +8,17 @@ import {ALPHABET,toTrits,buildPatches,applyPatches,sha256} from "./ternary.js";
 const enc=new TextEncoder(),dec=new TextDecoder("utf-8",{fatal:true});
 const isDirect=c=>c===" "||/^[a-z]$/.test(c);
 const byteDigits=b=>[Math.floor(b/27),b%27];
+
+function assertUnicodeScalarString(str){
+  for(let i=0;i<str.length;i++){
+    const c=str.charCodeAt(i);
+    if(c>=0xD800&&c<=0xDBFF){
+      const n=str.charCodeAt(++i);
+      if(!(n>=0xDC00&&n<=0xDFFF))throw new Error("Unpaired UTF-16 high surrogate; only valid Unicode scalar strings supported");
+    }else if(c>=0xDC00&&c<=0xDFFF)throw new Error("Unpaired UTF-16 low surrogate; only valid Unicode scalar strings supported");
+  }
+}
+
 const toBytes=digits=>{
   if(!Array.isArray(digits)||digits.length%2!==0)throw new Error("Invalid UTF8 pair count");
   const out=new Uint8Array(digits.length/2);
@@ -22,6 +33,7 @@ const toBytes=digits=>{
 
 export function encodeMixedTransport(str){
   if(typeof str!=="string")throw new TypeError("CVNSS string required");
+  assertUnicodeScalarString(str);
   const spans=[];
   let kind=null,buffer="";
   const flush=()=>{
@@ -62,6 +74,7 @@ export function mixedProfile(transport){
 export async function packLosslessV2(original,converter){
   if(typeof original!=="string"||typeof converter?.fromCqn!=="function"||typeof converter?.fromCvss!=="function")
     throw new TypeError("Require Unicode text and converter");
+  assertUnicodeScalarString(original);
   const cvss=converter.fromCqn(original).cvss;
   const canonical=converter.fromCvss(cvss).cqn;
   const transport=encodeMixedTransport(cvss);
