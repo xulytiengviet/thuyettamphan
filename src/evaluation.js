@@ -132,7 +132,7 @@ export async function evaluateFourPillars(corpus,converter,{merges=96}={}){
     heldoutSamples:test.length,trainingSamples:corpus.train.length,miniBpeMerges:merges,
     nativeBpeVocab:baseBpe.vocabSize,cvnssBpeVocab:cvssBpe.vocabSize,
     inputUtf8Bytes,rawCodepoints,rawByteTokens,
-    nativeMiniBpeTokens:bpeTokens,cvnssCodepoints,
+    nativeMiniBpeTokens:bpeTokens,cvnssCodepoints:cvssCodepoints,
     cvnssMiniBpeTokens:cvssBpeTokens,
     legacyBase27Digits:legacyDigits,mixedBase27Digits:mixedDigits,
     legacyTrits:legacyDigits*3,mixedTrits:mixedDigits*3,
