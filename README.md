@@ -11,7 +11,9 @@ Dự án mã nguồn công khai phục vụ nghiên cứu, kiểm chứng khoa h
 Mở `index.html` bằng HTTP local (`python -m http.server 8000`) hoặc GitHub Pages, không cần backend.
 
 ```bash
-npm test  # Chạy test Node.js: ánh xạ, phản ví dụ, sidecar, fuzz round-trip
+npm test             # Song ánh, LP1/LP2, mini-BPE, leakage, evidence validator, giao diện
+npm run evaluate     # Xuất reports/evaluation-v1.json với hash và kết quả P1–P3
+npm run check        # Kiểm tra cú pháp và chạy toàn bộ test + báo cáo
 ```
 
 Website GitHub Pages: https://xulytiengviet.github.io/thuyettamphan/ (xem [lịch sử triển khai](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/pages.yml) để kiểm tra phiên bản đang xuất bản).
@@ -20,10 +22,16 @@ Website GitHub Pages: https://xulytiengviet.github.io/thuyettamphan/ (xem [lịc
 
 - `index.html` — giao diện nghiên cứu tiếng Việt, mô phỏng và phòng thí nghiệm.
 - `assets/style.css` — hệ giao diện sáng chuyên nghiệp, tương thích máy tính, máy tính bảng và điện thoại.
-- `src/ternary.js` — Base27 / tam phân cân bằng / sidecar / kiểm thử có thể nhập bằng Node và trình duyệt.
+- `src/ternary.js` — Base27 / tam phân cân bằng / sidecar LP1 / kiểm thử Node và trình duyệt.
+- `src/codec-v2.js` — LP2: escape cục bộ, chỉ chuyển các đoạn ký tự ngoại lệ sang cặp Base27 UTF-8.
+- `src/evaluation.js` — bốn trụ đánh giá, mini byte-BPE có train/holdout, cổng kiểm định số liệu P4.
 - `src/app.js` — trình điều khiển UI, mô phỏng sinh token và chứng cứ.
 - `vendor/cvnss4-v5.js` — bộ chuyển đổi CVNSS4.0 5.0.0-audit-safe từ tác giả cung cấp, giữ đầy đủ nguyên gốc.
-- `tests/proof.test.mjs` — các phép thử có thể tái lập.
+- `tests/proof.test.mjs`, `tests/evaluation.test.mjs`, `tests/ui.test.mjs` — kiểm thử có thể tái lập.
+- `data/vietnamese_eval_v1.json` — 34 câu train, 18 câu holdout minh họa, không đại diện cho corpora tiếng Việt thật.
+- `data/llm_evidence_template_v1.json` — biểu mẫu trống để tải lên kết quả LLM đã đo thật.
+- `scripts/run_eval.mjs` — tạo báo cáo và hash SHA-256 của dữ liệu/các module.
+- `docs/FOUR_PILLARS_PROTOCOL.md` và `docs/TERNARY_LLM_ARCHITECTURE.md` — giao thức đánh giá và kiến trúc mục tiêu.
 - `rul-bridge/` — ví dụ kiểm chứng đồ thị bằng RUL mã nguồn thực, tách khỏi proof ngữ nghĩa codec.
 - `.github/workflows/proof.yml` — CI chạy node tests và cầu nối Rust/RUL.
 
@@ -64,3 +72,16 @@ Bản giao diện **nền sáng** do **Long Ngo phát triển**, có biểu đ�
 Các phần mã nguồn, giao diện và tài liệu **do dự án tự sở hữu** được phân phối theo [LICENSE-NONCOMMERCIAL.md](./LICENSE-NONCOMMERCIAL.md); việc sử dụng thương mại đòi hỏi giấy phép riêng bằng văn bản. Đây là mã nguồn được công bố với hạn chế phi thương mại, **không phải giấy phép nguồn mở theo định nghĩa OSI**.
 
 Các thành phần có nguồn gốc bên thứ ba **không bị đổi giấy phép**: thư viện RUL vẫn theo **MIT OR Apache-2.0**; bộ chuyển đổi CVNSS4.0 trong `vendor/` vẫn cần tuân thủ quyền và điều khoản nguyên gốc tương ứng. Tài liệu giấy phép không chuyển quyền sở hữu các thành phần đó cho dự án.
+
+## Phòng đánh giá 4 trụ cột (v1)
+
+Bấm **4 phép đánh giá** trên website. P1 kiểm hết 27 ký hiệu; P2 chạy round-trip LP1/LP2 và tính byte của sidecar; P3 huấn luyện **hai mini-BPE byte-level** trên 34 câu train rồi đo trên 18 câu holdout, không có rò rỉ train/holdout; P4 chỉ nhận hồ sơ đo thực tế, tối thiểu 3 seed, cùng hardware/dataset/protocol và ngân sách gần tương đương.
+
+Thử nghiệm chẩn đoán trong CI (không phải kết quả LLM) đã ghi nhận trên tập holdout v1:
+- 18/18 trường hợp có thể khôi phục qua gói lossless có sidecar;
+- luồng Base27 legacy 2.296 chữ số, LP2 escape cục bộ 1.273 chữ số;
+- văn bản gốc 1.418 byte; riêng tổng các gói LP2 dưới dạng JSON **11.166 byte**, lớn hơn dữ liệu gốc đáng kể;
+- mini-BPE Unicode trong báo cáo: 784 token trên tập holdout (không đại diện cho tokenizer BPE32K).
+
+Đây là **số liệu chẩn đoán của corpus cực nhỏ**. Chưa có kết quả đo việc huấn luyện mô hình, inference FLOPs, chất lượng tiếng Việt hoặc joule trên phần cứng. Xem [giao thức bốn trụ](docs/FOUR_PILLARS_PROTOCOL.md), [kiến trúc VVTLM](docs/TERNARY_LLM_ARCHITECTURE.md) và [CI / artifact kiểm chứng](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/proof.yml) trước khi trích dẫn.
+
