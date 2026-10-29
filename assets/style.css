@@ -195,3 +195,9 @@ footer a{font-weight:700}
 .eval-criteria small{font-size:11px;color:#647c94;line-height:1.4;display:block}
 @media(max-width:1100px){.evaluation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){.evaluation-grid{grid-template-columns:1fr}.eval-card .eval-desc{min-height:0}.eval-criteria{grid-template-columns:1fr}.four-eval-lab .eval-toolbar .controls .button{white-space:normal}}
+
+/* Two research problem tabs */
+.navlinks .research-tab{color:#155f9f;background:#eaf5ff;border:1px solid #c9e2f5;font-weight:900}
+.navlinks .research-tab:hover{background:#d9eeff;color:#094f90}
+.problem2-teaser .panel{border:1px solid #bcd9ed;background:linear-gradient(128deg,#f3f9ff,#effbf7)}
+.problem2-teaser .panel h2{margin-top:7px}
