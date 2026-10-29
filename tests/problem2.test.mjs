@@ -73,6 +73,6 @@ test("Bài toán 2 · static HTML, references and page tabs exist",()=>{
   }
   assert.match(p2,/40× = giả định/);
   assert.match(p2,/148 PFLOPS/);
-  assert.match(p2,/không phải số liệu chip đã đo/);
+  assert.match(p2,/Không phải benchmark chip chế tạo được đo độc lập/);
   assert.match(js,/evaluateScenario\(/);
 });
