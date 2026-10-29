@@ -44,3 +44,14 @@ Trang GitHub Pages dự kiến: https://xulytiengviet.github.io/thuyettamphan/
 | Tokenizer/LLM tam phân | Học và suy luận hiệu quả hơn | Chưa chứng minh; cần benchmark |
 
 **Chú ý:** SHA-256 bảo đảm so khớp dữ liệu khi có giá trị băm tin cậy, không xác thực nguồn gốc nếu thiếu chữ ký số. Mã nguồn là nguyên mẫu nghiên cứu, không nên dùng làm hệ thống mật mã hoặc xác thực pháp lý.
+
+## Bật GitHub Pages cho repository lần đầu
+
+Trang web đã có `index.html` trong root, nhưng GitHub Pages của repository mới cần được chủ sở hữu bật trong UI. GitHub Actions hiện không được phép tự tạo Pages site: API trả `Resource not accessible by integration`.
+
+1. Vào [Settings → Pages](https://github.com/xulytiengviet/thuyettamphan/settings/pages).
+2. Trong **Build and deployment**, chọn **Source: GitHub Actions**.
+3. Vào [Actions → Deploy Research Lab to GitHub Pages](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/pages.yml) và nhấn **Run workflow**.
+4. Sau khi deployment SUCCESS, mở https://xulytiengviet.github.io/thuyettamphan/.
+
+Workflow Pages để ở chế độ chạy thủ công nhằm tránh các lần thất bại lặp lại trước khi Pages được bật; workflow kiểm chứng bằng Node/RUL vẫn tự chạy trên push.
