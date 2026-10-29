@@ -1,0 +1,8 @@
+{
+  "name":"thuyettamphan",
+  "private":true,
+  "version":"1.0.0",
+  "type":"module",
+  "description":"CVNSS4.0–Base27–Ternary AI · scientific verification laboratory",
+  "scripts":{"test":"node --test tests/*.test.mjs","check":"npm test"}
+}
