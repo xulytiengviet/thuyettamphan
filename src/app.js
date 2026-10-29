@@ -1,3 +1,4 @@
+import {evaluateFourPillars,validateLLMEvidence} from "./evaluation.js";
 import {
   ALPHABET,toTrits,fromTrits,mappingProof,encodeTransport,decodeTransport,
   packProof,unpackProof,buildPatches,applyPatches
@@ -206,3 +207,87 @@ function renderBinaryTernaryChart(){
 $("stateTarget").addEventListener("input",renderBinaryTernaryChart);
 $("resetCompare").addEventListener("click",()=>{$("stateTarget").value="27";renderBinaryTernaryChart()});
 renderBinaryTernaryChart();
+
+/* Four validation pillars: no placeholder model measurements are presented as results. */
+let lastFourReport=null;
+const fixed3=n=>Number(n).toLocaleString("vi-VN",{maximumFractionDigits:3});
+async function runFourEvaluations(){
+  if(!converter?.fromCqn){
+    resultNote("fourEvalMessage","Không tìm thấy converter CVNSS v5 thực.","danger");return;
+  }
+  const button=$("runFourEvals");button.disabled=true;button.textContent="Đang xử lý...";
+  try{
+    const source=await fetch("./data/vietnamese_eval_v1.json",{cache:"no-store"});
+    if(!source.ok)throw new Error("Không tải được corpus v1: HTTP "+source.status);
+    const corpus=await source.json();
+    const report=await evaluateFourPillars(corpus,converter,{merges:96});
+    lastFourReport=report;
+    const {p1,p2,p3}=report;
+    set("eval1Value",p1.count+"/"+p1.unique);
+    set("eval1Detail",p1.minBits+" bit vs "+p1.minTrits+" trit · "+p1.unusedBinary+" mã nhị phân dư");
+    set("eval2Value",p2.losslessPass+"/"+p2.tested+" ca");
+    set("eval2Detail",p2.failCount+" lỗi · Gói LP2/UTF-8 = "+fixed3(p2.overheadRatio)+"×");
+    set("eval3Value",fixed3(p3.nativeMiniBpeTokens)+" token");
+    set("eval3Detail","Mini BPE Unicode · "+p3.heldoutSamples+" câu holdout");
+    set("evalLosslessSummary",`Corpus: ${p2.tested} câu holdout tách riêng
+Ký tự Unicode gốc: ${fixed3(p2.inputUtf8Bytes)} byte UTF-8
+Đúng byte gốc LP1 / LP2: ${p2.losslessPass}/${p2.tested}
+CVNSS thuần không giữ nguyên đầu vào: ${p2.plainConverterNonlosslessCases}/${p2.tested}
+Gói LP1 toàn tập: ${fixed3(p2.legacyPacketBytes)} byte (JSON)
+Gói LP2 toàn tập: ${fixed3(p2.mixedPacketBytes)} byte (JSON)
+Sidecar LP2 toàn tập: ${fixed3(p2.sidecarBytes)} byte JSON
+Tỷ lệ LP2 / UTF-8 gốc: ${fixed3(p2.overheadRatio)}×
+Phản ví dụ: ${p2.collisionPairs.map(x=>x.a+" / "+x.b+" → "+x.cA+" = "+x.cB).join("; ")}
+Các ca lỗi: ${p2.failCount}
+Kết luận: lossless của gói mở rộng trên corpus nhỏ, KHÔNG phải tối ưu nén.`);
+    set("evalTokenizerSummary",`Train: ${p3.trainingSamples} câu · Holdout: ${p3.heldoutSamples} câu · Mini BPE: ${p3.miniBpeMerges} merge tối đa
+Unicode gốc UTF-8: ${fixed3(p3.inputUtf8Bytes)} byte
+Token byte-level gốc: ${fixed3(p3.rawByteTokens)}
+Mini BPE Unicode: ${fixed3(p3.nativeMiniBpeTokens)} token (vocab=${p3.nativeBpeVocab})
+Mini BPE CVNSS v5: ${fixed3(p3.cvnssMiniBpeTokens)} token (vocab=${p3.cvnssBpeVocab}; chưa cộng sidecar)
+Base27 LP1 (legacy): ${fixed3(p3.legacyBase27Digits)} chữ số / ${fixed3(p3.legacyTrits)} trit
+Base27 LP2 (mixed): ${fixed3(p3.mixedBase27Digits)} chữ số / ${fixed3(p3.mixedTrits)} trit
+Kiểm tra khả nghịch mini-BPE và mixed: ${p3.bpeByteReversible&&p3.mixedByteReversible?"PASS":"FAIL"}
+Chú ý: token mini-BPE chỉ là chẩn đoán, không phải BPE32K hay benchmark LLM.`);
+    resultNote("fourEvalMessage",`Đã đo trên ${report.method.holdoutSamples} câu holdout (train ${report.method.trainingSamples}): P1 hữu hạn PASS; P2 ${p2.losslessPass}/${p2.tested} round-trip; P3 đã đo token/byte thật. P4 vẫn CHƯA có số liệu huấn luyện và năng lượng. Báo cáo JSON có thể xuất để tái lập.`,p2.failCount?"danger":"success");
+    $("exportEvaluation").disabled=false;
+  }catch(e){
+    resultNote("fourEvalMessage","Lỗi đánh giá: "+e.message,"danger");
+  }finally{button.disabled=false;button.textContent="▶ Chạy P1–P3 với dữ liệu thực"}
+}
+$("runFourEvals").addEventListener("click",runFourEvaluations);
+$("exportEvaluation").addEventListener("click",()=>{
+  if(!lastFourReport)return;
+  const payload=JSON.stringify(lastFourReport,null,2)+"\n";
+  const url=URL.createObjectURL(new Blob([payload],{type:"application/json;charset=utf-8"}));
+  const a=document.createElement("a");a.href=url;a.download="thuyettamphan-proof-eval-v1.json";
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+$("loadEvidenceTemplate").addEventListener("click",async()=>{
+  try{
+    const r=await fetch("./data/llm_evidence_template_v1.json");
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const t=await r.text();
+    $("llmEvidenceInput").value=t;
+    set("llmEvidenceResult","Đã tải cấu trúc dữ liệu KHÔNG CÓ KẾT QUẢ GIẢ. Cần thay thông tin bằng bản ghi đo thật và ít nhất 3 hạt giống cho mỗi mô hình.");
+  }catch(e){set("llmEvidenceResult","Không tải được mẫu: "+e.message)}
+});
+$("validateLLM").addEventListener("click",()=>{
+  try{
+    if(!$("llmEvidenceInput").value.trim())throw new Error("Chưa nhập kết quả thực nghiệm JSON");
+    const obj=JSON.parse($("llmEvidenceInput").value);
+    const r=validateLLMEvidence(obj);
+    if(!r.valid){
+      set("eval4Value","Chưa đạt điều kiện");
+      set("llmEvidenceResult","HỒ SƠ KHÔNG HỢP LỆ / CHƯA SO SÁNH ĐƯỢC\n"+r.errors.join("\n"));
+      return;
+    }
+    set("eval4Value","Đã xác thực schema");
+    const comparisons=r.comparisons.map(c=>
+      `${c.arm}: Δ điểm chất lượng ${fixed3(c.scoreGapPp)} pp; tiết kiệm FLOPs/byte ${fixed3(c.flopSavingPct)}%; joule/byte ${fixed3(c.energySavingPct)}%; latency ${fixed3(c.latencySavingPct)}%. Ngưỡng đề xuất: ${c.passProposedGate?"đạt":"chưa đạt"}`).join("\n");
+    set("llmEvidenceResult","SCHEMA VÀ TÍNH TƯƠNG ĐỒNG: HỢP LỆ\n"+comparisons+"\n\n"+r.caution+"\nKhông phải bằng chứng đã xác minh độc lập hay huấn luyện bởi website.");
+  }catch(e){
+    set("eval4Value","Chưa có kết quả");
+    set("llmEvidenceResult","Không thể kiểm định: "+e.message);
+  }
+});
