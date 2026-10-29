@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Thuyết Tam Phân: phòng thí nghiệm chứng minh Base27 ↔ 3 trit cân bằng, kiểm toán lossless CVNSS4.0, RUL verification và giả thuyết AI tiếng Việt.">
-<meta name="theme-color" content="#07111f">
+<meta name="theme-color" content="#f4f7fc">
 <title>THUYẾT TAM PHÂN · Chứng minh bài toán 1</title>
 <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
 <header><div class="navbar">
-<a class="brand" href="#dau"><span class="brandmark">3</span><span><b>THUYẾT TAM PHÂN</b><small>CVNSS4.0 × BASE27 × RUL</small></span></a>
-<nav class="navlinks" aria-label="Điều hướng"><a href="#dinh-ly">Định lý</a><a href="#lossless">Lossless Lab</a><a href="#rul">RUL Proof</a><a href="#tokenizer">Tokenizer</a><a href="#hardware">Edge &amp; Chip</a><a href="#benchmark">Benchmark</a><a href="#nguon">Nguồn</a></nav>
+<a class="brand" href="#dau"><span class="brandmark">3</span><span><b>THUYẾT TAM PHÂN</b><small>Long Ngo phát triển</small></span></a>
+<nav class="navlinks" aria-label="Điều hướng"><a href="#dinh-ly">Định lý</a><a href="#binary-ternary">So sánh nhị / tam phân</a><a href="#lossless">Lossless Lab</a><a href="#rul">RUL Proof</a><a href="#tokenizer">Tokenizer</a><a href="#hardware">Edge &amp; Chip</a><a href="#benchmark">Benchmark</a><a href="#nguon">Nguồn</a></nav>
 </div></header>
 <main class="app">
 <section id="dau" class="hero">
 <div>
-<div class="eyebrow">RESEARCH LAB 01 · PROOF-CARRYING LANGUAGE REPRESENTATION</div>
+<div class="eyebrow">PHÒNG THÍ NGHIỆM NGHIÊN CỨU · BÀI TOÁN 1</div>
 <h1>CHỨNG MINH<br><em>BÀI TOÁN 1</em></h1>
 <p class="lead">CVNSS4.0–Base27–Ternary AI: <b>giải quyết nút thắt thuật toán biểu diễn và xử lý tiếng Việt</b>. Từ song ánh toán học, phản ví dụ nhập nhằng, đến mô phỏng kiểm chứng RUL và thiết kế thí nghiệm với LLM tam phân.</p>
 <div class="pills"><span class="pill"><strong>ĐÃ CHỨNG MINH</strong> 27 = 3³</span><span class="pill">LOSSLESS CÓ ĐIỀU KIỆN</span><span class="pill">LLM / CHIP <span style="color:var(--amber)">CHƯA KIỂM CHỨNG</span></span></div>
@@ -53,12 +53,65 @@
 </div>
 </section>
 
+<section id="binary-ternary" class="section comparison-lab">
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">I.2 / BIỂU ĐỒ CHỨNG MINH · HỆ CƠ SỐ</div>
+      <h2>Nhị phân và tam phân: 27 trạng thái được biểu diễn thế nào?</h2>
+      <p class="sub">So sánh ba đại lượng độc lập: số chữ số tối thiểu trong mã có độ dài cố định, sức chứa của mã và tỷ lệ sử dụng không gian trạng thái. Thay đổi số ký hiệu để kiểm tra tính chất tổng quát.</p>
+    </div>
+    <span class="status proven">ĐỐI CHIẾU TOÁN HỌC</span>
+  </div>
+  <div class="layout2">
+    <article class="panel comparison-card">
+      <div class="chart-top">
+        <div>
+          <h3>Biểu đồ so sánh cơ số 2 ↔ cơ số 3</h3>
+          <p class="mathnote">Quy mô bảng ký hiệu cần mã hóa</p>
+        </div>
+        <span class="status measured">MÔ HÌNH ĐỘ DÀI CỐ ĐỊNH</span>
+      </div>
+      <div class="chart-input">
+        <label for="stateTarget">Số ký hiệu cần biểu diễn: <output id="stateTargetLabel" for="stateTarget">27</output></label>
+        <input type="range" id="stateTarget" min="2" max="81" step="1" value="27" aria-describedby="compareMethod">
+        <div class="controls"><button class="button" id="resetCompare" type="button">Khôi phục 27 ký hiệu</button></div>
+      </div>
+      <div class="chart-legend" aria-label="Chú giải biểu đồ"><span><i class="legend-dot binary"></i>Nhị phân (bit)</span><span><i class="legend-dot ternary"></i>Tam phân (trit)</span></div>
+      <div id="compareChart" class="compare-charts" aria-live="polite">
+        <p class="mathnote">Đang tính toán biểu đồ…</p>
+      </div>
+      <p class="note" id="compareMethod">Mỗi chỉ tiêu có trục riêng, tránh so sánh sai đơn vị. Độ dài 3 trit không thể trực tiếp quy đổi thành tiết kiệm 40% điện năng, kích thước chip hoặc số phép tính LLM.</p>
+    </article>
+    <article class="panel comparison-insights">
+      <h3>Đánh giá Bài toán 1</h3>
+      <div class="summary-metrics">
+        <div class="summary-metric"><span>Nhị phân</span><strong id="compareBinaryValue">5 bit</strong><small id="compareBinarySpace">32 mã khả dụng</small></div>
+        <div class="summary-metric"><span>Tam phân</span><strong id="compareTernaryValue">3 trit</strong><small id="compareTernarySpace">27 mã khả dụng</small></div>
+      </div>
+      <div class="scrolltable compare-table">
+        <table>
+          <thead><tr><th>Tiêu chí</th><th>Nhị phân</th><th>Tam phân</th></tr></thead>
+          <tbody>
+            <tr><td>Số trạng thái cơ sở</td><td>2</td><td>3</td></tr>
+            <tr><td>Chữ số mã cần dùng</td><td id="compareBitsCell">5 bit</td><td id="compareTritsCell">3 trit</td></tr>
+            <tr><td>Số mã khả dụng</td><td id="compareBinaryCapacity">32</td><td id="compareTernaryCapacity">27</td></tr>
+            <tr><td>Mức sử dụng mã</td><td id="compareBinaryUse">84,375%</td><td id="compareTernaryUse">100%</td></tr>
+            <tr><td>Trạng thái chưa dùng</td><td id="compareBinaryWaste">5</td><td id="compareTernaryWaste">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="success-note note" id="compareFinding" aria-live="polite">Với 27 ký hiệu, mã tam phân 3 trit tận dụng đúng 27/27 trạng thái; mã nhị phân 5 bit có 32 tổ hợp nên dư 5.</p>
+      <p class="mathnote">Định lý song ánh 27 ↔ 3 trit đã được chứng minh phía trên; biểu đồ này minh họa tính tối thiểu của số chữ số theo từng hệ cơ số, không chứng minh hiệu năng AI hoặc phần cứng.</p>
+    </article>
+  </div>
+</section>
+
 <section id="lossless" class="section">
 <div class="section-head"><div><div class="section-kicker">II / LOSSLESS PROOF LAB</div><h2>Kiểm chứng CQN ↔ CVNSS4.0 ↔ Base27 ↔ 3 trit</h2><p class="sub">Bộ chuyển đổi v5 có đồ thị ứng viên giải mã và chính sách canonical; do ánh xạ nhiều-một, CQN → CVNSS → CQN không lossless tuyệt đối. Thử gói mở rộng với sidecar thay đổi Unicode và SHA-256.</p></div><span class="status measured">KIỂM THỬ TẠI TRÌNH DUYỆT</span></div>
 <div class="panel">
 <div class="pipeline" aria-label="Pipeline minh họa"><div class="pipe"><b>Chữ Quốc Ngữ</b><small>Unicode UTF-8</small></div><div class="pipe"><b>CVNSS4.0 v5</b><small>CQN → CVSS</small></div><div class="pipe"><b>Base27 / Trit</b><small>Direct hoặc UTF8-pair</small></div><div class="pipe"><b>Sidecar</b><small>Unicode edits</small></div><div class="pipe"><b>SHA-256</b><small>So byte gốc</small></div></div>
 <label for="cqnInput">Nhập văn bản tiếng Việt để kiểm chứng (dữ liệu xử lý tại trình duyệt)</label>
-<textarea id="cqnInput" spellcheck="false">Tôi yêu Việt Nam. iên yên; oà òa. ĐIỆN TOÁN tam phân!</textarea>
+<textarea id="cqnInput" spellcheck="false">Chào bạn! Có vẻ như bạn đang rất hào hứng với tiếng Việt và một chủ đề công nghệ cực kỳ thú vị: Điện toán tam phân.</textarea>
 <div class="controls"><button class="button main" id="proofRun">▶ Chạy kiểm chứng</button><button class="button" id="counterexampleBtn">Thử phản ví dụ</button><button class="button" id="sentenceBtn">Ví dụ câu tiếng Việt</button><button class="button mint" id="copyPacketBtn">⧉ Copy gói chứng cứ</button></div>
 <div class="layout4" id="codecKpis">
 <div class="smallcard"><div class="kpi" id="kpiSource">—</div><div class="kpi-label">UTF-8 gốc · byte</div></div>
@@ -181,7 +234,7 @@
 </div>
 <details><summary>Phát biểu giả thuyết nghiên cứu (có thể bác bỏ)</summary><p><b>VTREH:</b> Với cùng corpus tiếng Việt, tập đánh giá và ngân sách, mô hình dùng CVNSS4.0 khả nghịch có sidecar, patch tokenizer và trọng số tam phân đạt chất lượng không thấp hơn baseline đã tối ưu tiếng Việt, đồng thời giảm chi phí tính toán và năng lượng trên thiết bị biên. Đây là giả thuyết, không phải định lý đã chứng minh.</p><p>Nếu không giảm độ dài chuỗi, chi phí attention có thể lớn hơn BPE; nếu sidecar quá lớn, lợi ích lưu trữ có thể mất. Các trường hợp phản chứng phải được công khai.</p></details>
 </section>
-<footer><span>THUYẾT TAM PHÂN · LAB 01 · 2026 · CVNSS4.0–Base27–RUL</span><span>Không tuyên bố đã có chip tam phân hay LLM tam phân được huấn luyện.</span></footer>
+<footer><span>© 2026 · <b>Long Ngo phát triển</b> · THUYẾT TAM PHÂN</span><a href="https://github.com/xulytiengviet/thuyettamphan/blob/main/LICENSE-NONCOMMERCIAL.md" target="_blank" rel="noopener noreferrer">Giấy phép phi thương mại · Non-Commercial License</a></footer>
 </main>
 <script src="./vendor/cvnss4-v5.js"></script>
 <script type="module" src="./src/app.js"></script>
