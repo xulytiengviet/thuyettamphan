@@ -14,8 +14,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Exhaustive mapping / converter round-trip / seeded fuzz
+      - name: P1-P4 proof suite, local escape, mini BPE, no fabricated LLM numbers
         run: npm test
+      - name: Produce reproducible P1-P3 diagnostic JSON report
+        run: node scripts/run_eval.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: thuyettamphan-four-pillar-diagnostics
+          path: reports/evaluation-v1.json
+          if-no-files-found: error
   rul-native-proof:
     runs-on: ubuntu-latest
     steps:
