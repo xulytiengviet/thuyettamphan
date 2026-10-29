@@ -56,6 +56,20 @@
   <div class="formula">R<sub>chi phí</sub> = C<sub>trit</sub>/C<sub>bit</sub> <span>·</span>  &nbsp;Thực tế cần so <b>chi phí/bit thông tin</b>, không chỉ chi phí/ký hiệu.</div>
 </section>
 
+<section class="section" id="radix-economy">
+<div class="section-title"><span class="label">01.2 · ĐỊNH LÝ KINH TẾ CƠ SỐ</span><h2>Vì sao cơ số 3 gần tối ưu khi chi phí chữ số tỷ lệ với cơ số?</h2><p>Trong mô hình kinh điển giả định <b>chi phí của một chữ số tỷ lệ với cơ số r</b>, số chữ số biểu diễn một giá trị tỷ lệ nghịch với ln(r). Hàm kinh tế cơ số là E(r)=r/ln(r), có điểm cực tiểu liên tục tại r=e≈2,718. Với các cơ số nguyên từ 2 trở lên, r=3 cho giá trị nhỏ nhất. Đây là định lý <b>có điều kiện</b>, không phải khẳng định tam phân chắc chắn rẻ nhất trên mọi phần cứng.</p></div>
+<div class="cols">
+  <article class="card panel">
+    <div class="formula">E(r) = r / ln(r) &nbsp; · &nbsp; E′(r) = [ln(r) − 1] / [ln(r)]²</div>
+    <p class="aside">E′(r)=0 ⇔ r=e. Vì chi phí tỷ lệ với r là giả định của mô hình, một chip có chi phí trạng thái tăng mạnh hơn hoặc nhẹ hơn r có thể có cơ số tối ưu khác.</p>
+  </article>
+  <article class="card panel">
+    <h3>Giá trị kinh tế cơ số chuẩn hóa</h3>
+    <div class="tablewrap"><table><thead><tr><th>Cơ số r</th><th>r / ln(r)</th><th>Trạng thái</th></tr></thead><tbody id="radixEconomyRows"></tbody></table></div>
+    <p class="aside">Giá trị càng nhỏ càng hiệu quả <b>theo giả định chi phí tỷ lệ r</b>; không phải diện tích/tiêu thụ điện của transistor hoặc bộ lọc quang.</p>
+  </article>
+</div>
+</section>
 <section class="section" id="chi-phi">
   <div class="section-title"><span class="label">02 · MÔ PHỎNG CHI PHÍ</span><h2>Khi nào hình phạt tam phân biến mất?</h2><p>Đổi các giả định và xem kết quả với <strong>27 trạng thái</strong> (5 bit nhị phân hoặc 3 trit cân bằng). Đơn vị chi phí bên dưới chỉ là <b>đơn vị quy ước</b>, không phải transistor/µm²/joule đo được.</p></div>
   <div class="cols">
