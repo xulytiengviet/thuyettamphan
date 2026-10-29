@@ -79,7 +79,7 @@
 </section>
 
 <section id="rul" class="section">
-<div class="section-head"><div><div class="section-kicker">III / PROOF-CARRYING EXECUTION</div><h2>Kết hợp RUL: Algorithm + Schedule + Proof</h2><p class="sub">RUL hiện là engine nhị phân SSA-DAG 128 bit cho pipeline dạng cột. Dự án dùng tư duy verifier, golden oracle và kiểm thử vi sai; giao diện bên dưới minh họa cấu trúc, không giả vờ chạy Rust/WASM trên trình duyệt.</p></div><span class="status measured">THAM CHIẾU RUL MÃ NGUỒN</span></div>
+<div class="section-head"><div><div class="section-kicker">III / PROOF-CARRYING EXECUTION</div><h2>Kết hợp RUL: Algorithm + Schedule + Proof</h2><p class="sub">RUL hiện là engine nhị phân SSA-DAG 128 bit cho pipeline dạng cột. Dự án dùng tư duy verifier, golden oracle và kiểm thử vi sai; giao diện bên dưới minh họa cấu trúc, không giả vờ chạy Rust/WASM trên trình duyệt.</p></div><span class="status measured">RUL NATIVE CI PASS</span></div>
 <div class="layout2">
 <div class="panel">
 <div class="equation">Artifact(.rl) = Algorithm + Schedule + Proof</div>
@@ -94,7 +94,7 @@
 <tr><td>Ánh xạ 27 chữ số</td><td>Toàn bộ 27 nghiệm</td><td><span class="status proven">PROVEN</span></td></tr>
 <tr><td>CVNSS canonical</td><td>56 nhóm nhập nhằng</td><td><span class="status invalid">NOT LOSSLESS</span></td></tr>
 <tr><td>CVNSS + sidecar</td><td>Kiểm thử round-trip + SHA-256</td><td><span class="status measured">TESTED</span></td></tr>
-<tr><td>RUL verifier</td><td>Kiểm tra đồ thị native Rust ở CI</td><td><span class="status pending">XEM CI</span></td></tr>
+<tr><td>RUL verifier</td><td>Đồ thị 16 nút / 384 byte, sai số T0=T1=T2=0 trong <a href="https://github.com/xulytiengviet/thuyettamphan/actions/runs/40805747715" target="_blank" rel="noopener">CI đã chạy</a></td><td><span class="status measured">CI PASS</span></td></tr>
 <tr><td>AI tam phân vượt BPE</td><td>Chưa có huấn luyện kiểm chứng</td><td><span class="status pending">UNPROVEN</span></td></tr>
 </tbody></table></div>
 <p class="note">Verifier RUL kiểm tra tính hợp lệ của đồ thị và an toàn truy cập, không tự chứng minh ngữ nghĩa lossless. Các con số tốc độ RUL trên pipeline số học không được suy rộng sang tokenizer tiếng Việt. <a href="https://github.com/xulytiengviet/thuyettamphan/actions/workflows/proof.yml" target="_blank" rel="noopener">Xem các lần chạy CI chứng minh bằng Node + Rust/RUL ↗</a>.</p>
