@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Thuyết Tam Phân: phòng thí nghiệm chứng minh Base27 ↔ 3 trit cân bằng, kiểm toán lossless CVNSS4.0, RUL verification và giả thuyết AI tiếng Việt.">
+<meta name="theme-color" content="#07111f">
+<title>THUYẾT TAM PHÂN · Chứng minh bài toán 1</title>
+<link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+<header><div class="navbar">
+<a class="brand" href="#dau"><span class="brandmark">3</span><span><b>THUYẾT TAM PHÂN</b><small>CVNSS4.0 × BASE27 × RUL</small></span></a>
+<nav class="navlinks" aria-label="Điều hướng"><a href="#dinh-ly">Định lý</a><a href="#lossless">Lossless Lab</a><a href="#rul">RUL Proof</a><a href="#tokenizer">Tokenizer</a><a href="#hardware">Edge &amp; Chip</a><a href="#benchmark">Benchmark</a><a href="#nguon">Nguồn</a></nav>
+</div></header>
+<main class="app">
+<section id="dau" class="hero">
+<div>
+<div class="eyebrow">RESEARCH LAB 01 · PROOF-CARRYING LANGUAGE REPRESENTATION</div>
+<h1>CHỨNG MINH<br><em>BÀI TOÁN 1</em></h1>
+<p class="lead">CVNSS4.0–Base27–Ternary AI: <b>giải quyết nút thắt thuật toán biểu diễn và xử lý tiếng Việt</b>. Từ song ánh toán học, phản ví dụ nhập nhằng, đến mô phỏng kiểm chứng RUL và thiết kế thí nghiệm với LLM tam phân.</p>
+<div class="pills"><span class="pill"><strong>ĐÃ CHỨNG MINH</strong> 27 = 3³</span><span class="pill">LOSSLESS CÓ ĐIỀU KIỆN</span><span class="pill">LLM / CHIP <span style="color:var(--amber)">CHƯA KIỂM CHỨNG</span></span></div>
+<div class="hero-buttons"><a class="button main" href="#dinh-ly">▶ Bắt đầu mô phỏng</a><a class="button ghost" href="#lossless">◉ Thử Lossless</a><a class="button ghost" href="https://github.com/xulytiengviet/thuyettamphan" target="_blank" rel="noopener">⌘ Mã nguồn GitHub</a></div>
+</div>
+<div class="hero-visual" aria-label="Minh họa ba trạng thái tam phân">
+<div class="visual-inner"><div class="ternary-orbit"><span class="core">3³</span><span class="orbit-node">−1</span><span class="orbit-node">0</span><span class="orbit-node">+1</span></div>
+<div class="orbit-foot">27 KÝ HIỆU → 3 TRIT CÂN BẰNG<br>GIAO THỨC BIỂU DIỄN, KHÔNG PHẢI CHIP VẬT LÝ</div></div>
+</div>
+</section>
+<section class="layout4" aria-label="Các chỉ số nghiên cứu">
+<div class="smallcard"><div class="kpi">27 / 27</div><div class="kpi-label">Song ánh có thể kiểm hết miền</div></div>
+<div class="smallcard"><div class="kpi green">3 TRIT</div><div class="kpi-label">Mã độ dài cố định tối thiểu</div></div>
+<div class="smallcard"><div class="kpi amber" id="ambiguityCount">56</div><div class="kpi-label">Nhóm nhập nhằng CVNSS v5 (audit)</div></div>
+<div class="smallcard"><div class="kpi purple" id="converterTests">—</div><div class="kpi-label">Self-test converter v5 (không phải proof toàn miền)</div></div>
+</section>
+
+<section id="dinh-ly" class="section">
+<div class="section-head"><div><div class="section-kicker">I / THEOREM</div><h2>Định lý song ánh Base27 ↔ tam phân cân bằng</h2><p class="sub">Bảng chính thức: dấu cách = 0, A = 1, …, Z = 26. Mỗi chữ số d ánh xạ duy nhất vào bộ (t₂, t₁, t₀) ∈ {−1,0,+1}³.</p></div><span class="status proven">CHỨNG MINH HỮU HẠN</span></div>
+<div class="layout2">
+<div class="panel">
+<div class="equation">d − 13 = 9t₂ + 3t₁ + t₀</div>
+<p class="mathnote">Vì tập số nguyên −13…+13 có đúng 27 phần tử và biểu diễn tam phân cân bằng 3 chữ số là duy nhất, phép ánh xạ là song ánh. k = ⌈log₃27⌉ = 3.</p>
+<label for="symbolPick">Ký hiệu cần chứng minh</label><select id="symbolPick"></select>
+<div class="proof-trits"><div class="tritbox"><b id="trit2">0</b><small>t₂ · 9</small></div><div class="tritbox"><b id="trit1">0</b><small>t₁ · 3</small></div><div class="tritbox"><b id="trit0">0</b><small>t₀ · 1</small></div></div>
+<div class="readout" id="singleProof" aria-live="polite">Đang kiểm tra...</div>
+<div class="controls"><button class="button main" id="all27Btn">✓ Kiểm chứng toàn bộ 27/27</button><button class="button" id="copyMappingBtn">Sao chép bảng</button></div>
+<div id="all27Status" class="note success-note" aria-live="polite">Bấm nút để chạy phép kiểm tra hữu hạn và tính số bộ trit khác nhau.</div>
+</div>
+<div class="panel">
+<h3>Ma trận chuyển đổi 27 ký hiệu</h3>
+<div class="scrolltable"><table><thead><tr><th>Ký hiệu</th><th>Base27</th><th>t₂</th><th>t₁</th><th>t₀</th><th>Giải mã</th></tr></thead><tbody id="mappingBody"></tbody></table></div>
+<p class="note">5 bit là độ dài nhị phân cố định nhỏ nhất cho 27 trạng thái; 3 trit không đồng nghĩa giảm 40% điện năng. Cần phân biệt số chữ số logic, mật độ vật lý và công nghệ bộ nhớ.</p>
+</div>
+</div>
+</section>
+
+<section id="lossless" class="section">
+<div class="section-head"><div><div class="section-kicker">II / LOSSLESS PROOF LAB</div><h2>Kiểm chứng CQN ↔ CVNSS4.0 ↔ Base27 ↔ 3 trit</h2><p class="sub">Bộ chuyển đổi v5 có đồ thị ứng viên giải mã và chính sách canonical; do ánh xạ nhiều-một, CQN → CVNSS → CQN không lossless tuyệt đối. Thử gói mở rộng với sidecar thay đổi Unicode và SHA-256.</p></div><span class="status measured">KIỂM THỬ TẠI TRÌNH DUYỆT</span></div>
+<div class="panel">
+<div class="pipeline" aria-label="Pipeline minh họa"><div class="pipe"><b>Chữ Quốc Ngữ</b><small>Unicode UTF-8</small></div><div class="pipe"><b>CVNSS4.0 v5</b><small>CQN → CVSS</small></div><div class="pipe"><b>Base27 / Trit</b><small>Direct hoặc UTF8-pair</small></div><div class="pipe"><b>Sidecar</b><small>Unicode edits</small></div><div class="pipe"><b>SHA-256</b><small>So byte gốc</small></div></div>
+<label for="cqnInput">Nhập văn bản tiếng Việt để kiểm chứng (dữ liệu xử lý tại trình duyệt)</label>
+<textarea id="cqnInput" spellcheck="false">Tôi yêu Việt Nam. iên yên; oà òa. ĐIỆN TOÁN tam phân!</textarea>
+<div class="controls"><button class="button main" id="proofRun">▶ Chạy kiểm chứng</button><button class="button" id="counterexampleBtn">Thử phản ví dụ</button><button class="button" id="sentenceBtn">Ví dụ câu tiếng Việt</button><button class="button mint" id="copyPacketBtn">⧉ Copy gói chứng cứ</button></div>
+<div class="layout4" id="codecKpis">
+<div class="smallcard"><div class="kpi" id="kpiSource">—</div><div class="kpi-label">UTF-8 gốc · byte</div></div>
+<div class="smallcard"><div class="kpi" id="kpiTrit">—</div><div class="kpi-label">Trit của luồng mã Base27</div></div>
+<div class="smallcard"><div class="kpi" id="kpiSidecar">—</div><div class="kpi-label">Sidecar JSON · byte</div></div>
+<div class="smallcard"><div class="kpi" id="kpiPacket">—</div><div class="kpi-label">Gói chứng cứ JSON · byte</div></div>
+</div>
+<div class="layout2" style="margin-top:15px">
+<div><h4>1 · CVNSS4.0 (không tự thân lossless)</h4><div id="cvssOutput" class="readout"></div></div>
+<div><h4>2 · CVNSS4.0 giải mã thông thường</h4><div id="ordinaryOutput" class="readout"></div></div>
+<div><h4>3 · CVNSS4.0 qua Base27 → 3 trit</h4><div id="digitOutput" class="readout"></div></div>
+<div><h4>4 · Khôi phục qua sidecar</h4><div id="recoveredOutput" class="readout"></div></div>
+</div>
+<div class="layout2" style="margin-top:15px"><div><h4>Trạng thái kiểm chứng</h4><div id="losslessStatus" class="note" aria-live="polite">Chưa chạy thử.</div></div><div><h4>Chứng cứ SHA-256 / phiên bản</h4><div id="hashOutput" class="readout">—</div></div></div>
+<details><summary>Xem gói proof-carrying đã xuất (không chứa toàn bộ bản gốc mặc định)</summary><pre id="packetOutput" class="code"></pre></details>
+<details><summary>Tại sao một bản mã gốc không luôn khôi phục nguyên văn?</summary><p>Ví dụ <code>iên → ily ← yên</code> hoặc <code>oà → oal ← òa</code>. Khi hai đầu vào khác nhau nhận cùng mã, bộ giải mã chỉ có thể chọn một bản canonical. Cần sidecar để phân biệt trường hợp gốc, chữ hoa, dấu câu và ký tự ngoài bảng 27.</p><p>Gói thử nghiệm lưu các phép sửa Unicode so với văn bản canonical; thuật toán so khớp LCS chỉ dùng cho chuỗi vừa, còn văn bản dài sử dụng bản vá prefix/suffix đúng nhưng chưa tối ưu nén.</p></details>
+</div>
+</section>
+
+<section id="rul" class="section">
+<div class="section-head"><div><div class="section-kicker">III / PROOF-CARRYING EXECUTION</div><h2>Kết hợp RUL: Algorithm + Schedule + Proof</h2><p class="sub">RUL hiện là engine nhị phân SSA-DAG 128 bit cho pipeline dạng cột. Dự án dùng tư duy verifier, golden oracle và kiểm thử vi sai; giao diện bên dưới minh họa cấu trúc, không giả vờ chạy Rust/WASM trên trình duyệt.</p></div><span class="status measured">THAM CHIẾU RUL MÃ NGUỒN</span></div>
+<div class="layout2">
+<div class="panel">
+<div class="equation">Artifact(.rl) = Algorithm + Schedule + Proof</div>
+<div class="flowline"><div class="flowstep">NodeFrame <small>128 bit · 16 byte</small></div><span class="arrow">→</span><div class="flowstep">Verifier <small>SSA-DAG / bounds</small></div><span class="arrow">→</span><div class="flowstep">Tier 0/1/2 <small>Oracle / SIMD</small></div></div>
+<h4>Chọn tầng thực thi mô phỏng</h4><select id="rulTier"><option value="tier0">Tier 0 · Golden Oracle</option><option value="tier1">Tier 1 · Vector Stencil</option><option value="tier2">Tier 2 · Fused SIMD</option></select>
+<div class="controls"><button class="button main" id="rulSimBtn">▶ Mô phỏng quy trình</button><a class="button ghost" href="https://github.com/xulytiengviet/rul" target="_blank" rel="noopener">Xem RUL</a></div>
+<div id="rulReadout" class="readout" aria-live="polite">Mô phỏng quy trình: không chạy bản mã RUL thực trong trình duyệt.</div>
+</div>
+<div class="panel">
+<h3>Chứng minh được đến đâu?</h3>
+<div class="scrolltable"><table><thead><tr><th>Tầng</th><th>Bằng chứng</th><th>Trạng thái</th></tr></thead><tbody>
+<tr><td>Ánh xạ 27 chữ số</td><td>Toàn bộ 27 nghiệm</td><td><span class="status proven">PROVEN</span></td></tr>
+<tr><td>CVNSS canonical</td><td>56 nhóm nhập nhằng</td><td><span class="status invalid">NOT LOSSLESS</span></td></tr>
+<tr><td>CVNSS + sidecar</td><td>Kiểm thử round-trip + SHA-256</td><td><span class="status measured">TESTED</span></td></tr>
+<tr><td>RUL verifier</td><td>Kiểm tra đồ thị native Rust ở CI</td><td><span class="status pending">XEM CI</span></td></tr>
+<tr><td>AI tam phân vượt BPE</td><td>Chưa có huấn luyện kiểm chứng</td><td><span class="status pending">UNPROVEN</span></td></tr>
+</tbody></table></div>
+<p class="note">Verifier RUL kiểm tra tính hợp lệ của đồ thị và an toàn truy cập, không tự chứng minh ngữ nghĩa lossless. Các con số tốc độ RUL trên pipeline số học không được suy rộng sang tokenizer tiếng Việt.</p>
+</div>
+</div>
+</section>
+
+<section id="tokenizer" class="section">
+<div class="section-head"><div><div class="section-kicker">IV / TOKEN BOTTLENECK</div><h2>27 ký hiệu có chắc nhanh hơn BPE 32K?</h2><p class="sub">Bảng embedding nhỏ hơn không đồng nghĩa Transformer nhanh hơn; nếu chuỗi ký tự dài hơn, phần attention có thể tăng theo bình phương độ dài. Thử điều chỉnh giả định để thấy nút thắt.</p></div><span class="status pending">MÔ PHỎNG GIẢ ĐỊNH</span></div>
+<div class="layout2">
+<div class="panel">
+<label for="bpeLength">Số token BPE cho một đoạn: <b id="bpeLengthLabel">2.000</b></label><input type="range" min="100" max="5000" step="100" id="bpeLength" value="2000">
+<label for="charRatio">Hệ số tăng số token ký tự/CVNSS: <b id="charRatioLabel">3,0 ×</b></label><input type="range" min="1" max="8" step=".25" id="charRatio" value="3">
+<label for="embeddingDim">Chiều embedding: <b id="embeddingDimLabel">512</b></label><input type="range" min="128" max="2048" step="128" id="embeddingDim" value="512">
+<div class="comparison" style="margin-top:18px">
+<div class="compareblock"><b>BPE 32.000</b><strong id="embBpe">—</strong><span class="muted" style="font-size:12px">tham số embedding</span></div>
+<div class="compareblock"><b>Base27 27</b><strong id="emb27">—</strong><span class="muted" style="font-size:12px">tham số embedding</span></div>
+</div>
+<div class="equation" id="attentionEquation">Attention ratio = (L₍CVNSS₎ / L₍BPE₎)²</div>
+<div id="attentionBar" class="bar"><span style="width:50%"></span></div><p id="attentionDesc" class="mathnote"></p>
+</div>
+<div class="panel">
+<h3>Giải pháp thuật toán đề xuất</h3>
+<div class="flowline"><div class="flowstep">CVNSS v5 <small>Chữ viết ngắn</small></div><span class="arrow">→</span><div class="flowstep">3 trit <small>Nhóm 27 trạng thái</small></div><span class="arrow">→</span><div class="flowstep">Patch thích ứng <small>Giảm độ dài L</small></div></div>
+<p>Mỗi ký hiệu có thể dùng embedding phân rã <code>e(c)=E₂[t₂]+E₁[t₁]+E₀[t₀]</code> với 9d phần tử embedding, thay vì 27d. Nhưng embedding phân rã có ràng buộc biểu diễn và phải được đánh giá chất lượng.</p>
+<div class="equation">C ≈ aLd² + bL²d + cLVd</div>
+<p>Giải pháp có triển vọng là giữ ba trit như dạng lưu trữ logic của <b>một ký hiệu</b>, sau đó tạo patch ở cấp âm tiết/cụm, thay vì bắt Transformer xử lý mỗi trit thành một token riêng.</p>
+<p class="note">Các thanh và công thức trong mục này là tính toán theo giả định; không phải phép đo BPE thực tế và không được viện dẫn như benchmark tokenizer.</p>
+</div>
+</div>
+</section>
+
+<section id="hardware" class="section">
+<div class="section-head"><div><div class="section-kicker">V / EDGE AI &amp; PHYSICAL COMPUTING</div><h2>Từ ký hiệu tam phân đến bộ não robot tiếng Việt</h2><p class="sub">Ba cấp khác nhau: mã hóa dữ liệu Base27, trọng số mô hình tam phân và linh kiện tam phân vật lý. Không thể đồng nhất chúng chỉ vì đều xuất hiện số 3.</p></div><span class="status pending">LỘ TRÌNH NGHIÊN CỨU</span></div>
+<div class="layout3">
+<div class="panel"><div class="kpi">01</div><h3>Ngôn ngữ · T27</h3><p>Mã hóa CVNSS4.0 bằng 27 ký hiệu và 3 trit cân bằng; có escape/sidecar kiểm chứng không mất mát.</p><span class="status measured">MÃ HÓA + TEST</span><div class="tagrow"><span class="tag">Lossless codec</span><span class="tag">Token budget</span><span class="tag">Unicode</span></div></div>
+<div class="panel"><div class="kpi green">02</div><h3>LLM · BitNet</h3><p>Thử nghiệm trọng số {-1,0,+1}, tokenizer phân cấp, các tác vụ tiếng Việt, RAM, độ trễ và joule trên CPU/NPU.</p><span class="status pending">CHƯA HUẤN LUYỆN</span><div class="tagrow"><span class="tag">BPB</span><span class="tag">FLOPs</span><span class="tag">J/token</span></div></div>
+<div class="panel"><div class="kpi purple">03</div><h3>Chip · Robot</h3><p>Nghiên cứu cổng ba trạng thái, độ ổn định mức điện áp, ADC/DAC, nhiễu, mật độ lưu trữ, interconnect và giao tiếp motor/sensor.</p><span class="status pending">CHƯA CÓ CHIP</span><div class="tagrow"><span class="tag">3-level device</span><span class="tag">Sensor fusion</span><span class="tag">Robot action</span></div></div>
+</div>
+<div class="panel" style="margin-top:16px">
+<h3>Pipeline bộ não robot giả định</h3>
+<div class="pipeline"><div class="pipe"><b>Giọng nói / Lệnh</b><small>ASR tiếng Việt</small></div><div class="pipe"><b>CVNSS / T27</b><small>Không mất dữ liệu</small></div><div class="pipe"><b>Ternary LLM</b><small>Ngôn ngữ → kế hoạch</small></div><div class="pipe"><b>Policy / VLA</b><small>Hành động được ràng buộc</small></div><div class="pipe"><b>Robot / Cảm biến</b><small>ROS2 / SLAM / motor</small></div></div>
+<p class="note">Mô hình ngôn ngữ chưa thể thay thế trực tiếp toàn bộ bộ điều khiển robot. Cần perception, điều khiển thời gian thực, an toàn phần cứng và xác thực hành động độc lập.</p>
+</div>
+</section>
+
+<section id="benchmark" class="section">
+<div class="section-head"><div><div class="section-kicker">VI / SCIENTIFIC BENCHMARK</div><h2>Thiết kế thực nghiệm có thể bác bỏ giả thuyết</h2><p class="sub">So sánh cùng dữ liệu, cùng ngữ cảnh, ngân sách FLOPs, model size và ngẫu nhiên hóa hạt giống. Mục tiêu chưa phải kết quả.</p></div><span class="status pending">CHỜ HUẤN LUYỆN THỰC</span></div>
+<div class="panel">
+<div class="scrolltable"><table><thead><tr><th>Đối chứng</th><th>Tokenizer / biểu diễn</th><th>Mô hình</th><th>Mục tiêu kiểm tra</th></tr></thead><tbody>
+<tr><td>M0</td><td>Unicode + BPE 32K</td><td>Transformer</td><td>Baseline chuẩn</td></tr>
+<tr><td>M1</td><td>Unicode + SentencePiece 8K</td><td>Transformer</td><td>Baseline tối ưu tiếng Việt</td></tr>
+<tr><td>M2</td><td>UTF-8 byte-level</td><td>Transformer</td><td>Token-free baseline</td></tr>
+<tr><td>M3</td><td>CVNSS4.0 + 27 ký hiệu</td><td>Transformer</td><td>Ảnh hưởng bảng chữ nhỏ</td></tr>
+<tr><td>M4</td><td>CVNSS4.0 + BPE 8K</td><td>Transformer</td><td>Ảnh hưởng quy tắc chữ viết</td></tr>
+<tr><td>M5</td><td>CVNSS4.0 + 3-trit embedding + patch</td><td>Transformer</td><td>Ảnh hưởng biểu diễn phân cấp</td></tr>
+<tr><td>M6</td><td>M5 + trọng số {-1,0,+1}</td><td>BitNet-style</td><td>Tương tác tokenizer / low-bit weights</td></tr>
+</tbody></table></div>
+<div class="equation">BPB = − Σ log₂ Pθ(E(xᵢ)) / Σ |xᵢ|₍UTF‑8₎</div>
+<p class="mathnote">BPB chỉ so sánh khi xác suất được quy đổi nhất quán về byte văn bản gốc. Cần đo thêm VMLU, hỏi đáp, thông tin thực thể, dấu thanh, lệnh robot, latency, bộ nhớ và joule/byte đầu ra.</p>
+<div class="layout4">
+<div class="smallcard"><div class="kpi amber">100%</div><div class="kpi-label">Round-trip trên miền dữ liệu công bố · ngưỡng mục tiêu</div></div>
+<div class="smallcard"><div class="kpi amber">≥20%</div><div class="kpi-label">Giảm FLOPs tại chất lượng không kém · mục tiêu</div></div>
+<div class="smallcard"><div class="kpi amber">≥20%</div><div class="kpi-label">Giảm joule/byte tiếng Việt · mục tiêu</div></div>
+<div class="smallcard"><div class="kpi amber">≤1pp</div><div class="kpi-label">Sụt chất lượng trên tác vụ · mục tiêu</div></div>
+</div>
+</div>
+</section>
+
+<section id="nguon" class="section">
+<div class="section-head"><div><div class="section-kicker">VII / REPRODUCIBILITY</div><h2>Chứng cứ, mã nguồn và giới hạn công bố</h2><p class="sub">Dữ liệu trực tiếp phải đi cùng phiên bản nguồn, test log, mã commit và kết quả CI. Số liệu từ README bên ngoài chưa phải benchmark độc lập của dự án này.</p></div></div>
+<div class="layout2">
+<div class="panel"><h3>Kiểm toán converter đang được nạp</h3><div class="readout" id="auditReport">Đang đọc audit()...</div><div class="controls"><button class="button" id="copyAuditBtn">Copy báo cáo audit</button><button class="button" id="runTestsBtn">Chạy 27+ phép thử ngay trên trang</button></div><div id="browserTests" class="note" aria-live="polite">Chưa chạy kiểm tra mở rộng.</div></div>
+<div class="panel"><h3>Nguồn học thuật và mã nguồn</h3><p><a href="https://github.com/xulytiengviet/rul" target="_blank" rel="noopener">RUL · source code &amp; verifier</a> — SSA-DAG 128-bit, Tier 0/1/2, MIT/Apache-2.0.</p><p><a href="https://base27-cvnss.github.io/" target="_blank" rel="noopener">Base27–CVNSS4.0 · trang gốc</a> — quy ước 27 ký hiệu và dãy số.</p><p><a href="https://github.com/xulytiengviet/thuyettamphan" target="_blank" rel="noopener">Thuyết tam phân · repository này</a> — JS kiểm chứng, converter v5 và RUL bridge.</p><p><a href="https://arxiv.org/abs/2402.17764" target="_blank" rel="noopener">BitNet b1.58</a>; <a href="https://arxiv.org/abs/2105.13626" target="_blank" rel="noopener">ByT5</a>; <a href="https://arxiv.org/abs/2412.09871" target="_blank" rel="noopener">Byte Latent Transformer</a>.</p><p class="note">RUL hiện không được biên dịch thành WASM ở website này. Mô phỏng RUL là học thuật; kiểm thử RUL thật được định nghĩa trong thư mục <code>rul-bridge/</code> và CI.</p></div>
+</div>
+<details><summary>Phát biểu giả thuyết nghiên cứu (có thể bác bỏ)</summary><p><b>VTREH:</b> Với cùng corpus tiếng Việt, tập đánh giá và ngân sách, mô hình dùng CVNSS4.0 khả nghịch có sidecar, patch tokenizer và trọng số tam phân đạt chất lượng không thấp hơn baseline đã tối ưu tiếng Việt, đồng thời giảm chi phí tính toán và năng lượng trên thiết bị biên. Đây là giả thuyết, không phải định lý đã chứng minh.</p><p>Nếu không giảm độ dài chuỗi, chi phí attention có thể lớn hơn BPE; nếu sidecar quá lớn, lợi ích lưu trữ có thể mất. Các trường hợp phản chứng phải được công khai.</p></details>
+</section>
+<footer><span>THUYẾT TAM PHÂN · LAB 01 · 2026 · CVNSS4.0–Base27–RUL</span><span>Không tuyên bố đã có chip tam phân hay LLM tam phân được huấn luyện.</span></footer>
+</main>
+<script src="./vendor/cvnss4-v5.js"></script>
+<script type="module" src="./src/app.js"></script>
+</body></html>
