@@ -8,6 +8,15 @@ import {toTrits,fromTrits,ALPHABET} from "../src/ternary.js";
 
 export const WAVELENGTHS_NM=Object.freeze({"-1":1550,"0":1310,"1":1064});
 export const STATES=[-1,0,1];
+/**
+ * Classical radix economy assumes cost of one digit grows linearly with radix.
+ * The objective r / ln(r) has its continuous minimum at Euler's number e.
+ * This mathematical model does not prove cost-optimality in CMOS or optics.
+ */
+export function radixEconomy(radix){
+  if(!Number.isFinite(radix)||radix<=1)throw new RangeError("Radix must be greater than one");
+  return radix/Math.log(radix);
+}
 export function encodeSymbol(symbol){
   if(typeof symbol!=="string"||symbol.length!==1)throw new TypeError("Select exactly one Base27 symbol");
   const digit=ALPHABET.indexOf(symbol.toUpperCase());
