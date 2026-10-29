@@ -36,3 +36,14 @@ test("noncommercial license is scoped to original project-owned assets",()=>{
   assert.match(license,/MIT OR Apache-2\.0/);
   assert.match(license,/không thay thế/);
 });
+
+test("four-pillar dashboard is connected to actual evaluation functions and no fabricated LLM score",()=>{
+  for(const id of ["four-evals","runFourEvals","exportEvaluation","eval1Value","eval2Value","eval3Value",
+    "eval4Value","evalLosslessSummary","evalTokenizerSummary","llmEvidenceInput","validateLLM"]){
+    assert.ok(html.includes('id="'+id+'"'),"missing four-pillar element: "+id);
+  }
+  assert.match(app,/evaluateFourPillars\(corpus,converter/);
+  assert.match(app,/validateLLMEvidence\(obj\)/);
+  assert.match(html,/KHÔNG TẠO SỐ LIỆU GIẢ/);
+  assert.match(html,/id="proofMode"/);
+});
