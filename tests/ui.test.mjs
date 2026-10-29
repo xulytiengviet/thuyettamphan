@@ -27,7 +27,7 @@ test("chart is wired and explicitly separates units of comparison",()=>{
   assert.ok(app.includes("function renderBinaryTernaryChart()"));
   assert.ok(app.includes("function leastDigits(base,n)"));
   assert.ok(css.includes(".chart-group"));
-  assert.ok(html.includes("chưa phải bằng chứng tiết kiệm điện"));
+  assert.ok(app.includes("chưa phải bằng chứng tiết kiệm điện"));
 });
 
 test("noncommercial license is scoped to original project-owned assets",()=>{
