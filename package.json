@@ -7,6 +7,7 @@
   "description": "CVNSS4.0–Base27–Ternary AI · scientific verification laboratory",
   "scripts": {
     "test": "node --check src/app.js && node --test tests/*.test.mjs",
-    "check": "node --check src/app.js && node --test tests/*.test.mjs"
+    "check": "node --check src/app.js && node --check src/evaluation.js && node --check src/codec-v2.js && npm test && npm run evaluate",
+    "evaluate": "node scripts/run_eval.mjs"
   }
 }
