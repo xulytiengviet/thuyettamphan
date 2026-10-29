@@ -45,16 +45,13 @@ Website GitHub Pages: https://xulytiengviet.github.io/thuyettamphan/ (xem [lịc
 
 **Chú ý:** SHA-256 bảo đảm so khớp dữ liệu khi có giá trị băm tin cậy, không xác thực nguồn gốc nếu thiếu chữ ký số. Mã nguồn là nguyên mẫu nghiên cứu, không nên dùng làm hệ thống mật mã hoặc xác thực pháp lý.
 
-## Bật GitHub Pages cho repository lần đầu
+## Triển khai trên GitHub Pages
 
-Trang web đã có `index.html` trong root, nhưng GitHub Pages của repository mới cần được chủ sở hữu bật trong UI. GitHub Actions hiện không được phép tự tạo Pages site: API trả `Resource not accessible by integration`.
+Địa chỉ: **https://xulytiengviet.github.io/thuyettamphan/**
 
-1. Vào [Settings → Pages](https://github.com/xulytiengviet/thuyettamphan/settings/pages).
-2. Trong **Build and deployment**, chọn **Source: GitHub Actions**.
-3. Vào [Actions → Deploy Research Lab to GitHub Pages](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/pages.yml) và nhấn **Run workflow**.
-4. Sau khi deployment SUCCESS, mở https://xulytiengviet.github.io/thuyettamphan/.
+Repository có thể được xuất bản trực tiếp từ nhánh `main` theo tiến trình `pages build and deployment` của GitHub Pages. Xem [trạng thái triển khai thực tế](https://github.com/xulytiengviet/thuyettamphan/actions) trước khi xác nhận phiên bản mới đã hiển thị; các tệp HTML, CSS và JavaScript không cần build riêng.
 
-Workflow Pages để ở chế độ chạy thủ công nhằm tránh các lần thất bại lặp lại trước khi Pages được bật; workflow kiểm chứng bằng Node/RUL vẫn tự chạy trên push.
+Tệp `.github/workflows/pages.yml` là phương án triển khai thủ công bằng GitHub Actions khi chủ sở hữu cấu hình Source là `GitHub Actions`; không cần sử dụng workflow này nếu Pages đang cấu hình publish từ nhánh `main`.
 
 ## Giao diện cập nhật — Bài toán 1
 
