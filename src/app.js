@@ -1,4 +1,5 @@
 import {evaluateFourPillars,validateLLMEvidence} from "./evaluation.js";
+import {packLosslessV2} from "./codec-v2.js";
 import {
   ALPHABET,toTrits,fromTrits,mappingProof,encodeTransport,decodeTransport,
   packProof,unpackProof,buildPatches,applyPatches
@@ -52,12 +53,18 @@ async function runLossless() {
   if(input.length>120000){resultNote("losslessStatus","Bản demo giới hạn 120.000 UTF-16 code units để tránh treo trình duyệt.","danger");return}
   $("proofRun").disabled=true;set("losslessStatus","Đang kiểm chứng...");
   try{
-    const r=await packProof(input,converter);
+    const isLp2=$("proofMode").value==="lp2";
+    const raw=isLp2?await packLosslessV2(input,converter):await packProof(input,converter);
+    const r=isLp2?{...raw,ordinary:raw.canonical,restored:raw.recovered,
+      basicRoundtrip:raw.canonicalEqual,packetRoundtrip:raw.valid,
+      bytes:raw.originalBytes,digitCount:raw.digits,tritCount:raw.trits,
+      mode:"mixed27-v1"}:raw;
+    const transportDigits=isLp2?r.packet.transport.spans.flatMap(span=>span.digits):r.packet.transport.digits;
     latestPacket=JSON.stringify(r.packet,null,2);
     set("cvssOutput",r.cvss||"(rỗng)");
     set("ordinaryOutput",r.ordinary||"(rỗng)");
     set("recoveredOutput",r.restored||"(rỗng)");
-    set("digitOutput",`Chế độ: ${r.mode}\n${r.packet.transport.digits.slice(0,120).join(" ")}${r.packet.transport.digits.length>120?" …":""}\nTổng: ${r.digitCount} chữ số Base27 · ${r.tritCount} trit\nGói vận chuyển có thể giải ngược CVNSS và được bao bởi sidecar.`);
+    set("digitOutput",`Chế độ: ${r.mode}\n${transportDigits.slice(0,120).join(" ")}${transportDigits.length>120?" …":""}\nTổng: ${r.digitCount} chữ số Base27 · ${r.tritCount} trit\nGói vận chuyển có thể giải ngược CVNSS và được bao bởi sidecar.`);
     set("kpiSource",countFmt(r.bytes));set("kpiTrit",countFmt(r.tritCount));
     set("kpiSidecar",countFmt(r.sidecarBytes));set("kpiPacket",countFmt(r.packetBytes));
     set("packetOutput",latestPacket);
@@ -69,6 +76,7 @@ async function runLossless() {
   finally{$("proofRun").disabled=false}
 }
 $("proofRun").addEventListener("click",runLossless);
+$("proofMode").addEventListener("change",runLossless);
 $("counterexampleBtn").addEventListener("click",()=>{$("cqnInput").value="iên yên, oà òa — Êm đềm!";runLossless()});
 $("sentenceBtn").addEventListener("click",()=>{$("cqnInput").value="Tôi yêu Việt Nam. Robot tự hành cần nhận thức, lập kế hoạch và kiểm soát hành động an toàn.";runLossless()});
 $("copyPacketBtn").addEventListener("click",async()=>{
