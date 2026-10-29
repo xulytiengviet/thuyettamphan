@@ -1,0 +1,32 @@
+{
+  "schema": "vt-llm-eval/v1",
+  "baseline_id": "M0",
+  "note": "BIỂU MẪU TRỐNG. Không có kết quả huấn luyện hoặc số đo giả định. Điền các run từ thiết bị thật, mỗi arm >=3 seeds độc lập; metadata và cùng dataset/hardware/eval protocol.",
+  "expected_run_fields": {
+    "seed": "integer unique within each arm",
+    "dataset_sha256": "64 hex digits, dataset version must match across arms",
+    "hardware_id": "same exact machine + CPU/GPU SKU and driver for each arm",
+    "eval_protocol": "same eval tasks, decoding settings, validation code version",
+    "tokenizer_version": "tokenizer name + commit/hash",
+    "model_commit": "model checkpoint commit/hash",
+    "score_pct": "measured task quality percent (0..100)",
+    "inference_flops_per_utf8_byte": "measured/estimated inference FLOPs divided by original UTF-8 output bytes; record derivation",
+    "joule_per_utf8_byte": "measured energy in J divided by original UTF-8 output bytes",
+    "latency_ms_per_utf8_byte": "measured latency / original UTF-8 output bytes",
+    "peak_ram_mb": "measured peak RAM in MB",
+    "training_compute_flops": "training FLOPs summed for all phases; compare within 5%",
+    "model_params": "number of trainable model parameters; compare within 5%"
+  },
+  "arms": [
+    {
+      "id": "M0",
+      "description": "Baseline Vietnamese-tuned BPE; not yet measured",
+      "runs": []
+    },
+    {
+      "id": "M6",
+      "description": "CVNSS4.0–T27 patch + ternary-weight LLM; not yet measured",
+      "runs": []
+    }
+  ]
+}
