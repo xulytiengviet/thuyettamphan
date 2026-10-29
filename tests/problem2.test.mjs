@@ -2,9 +2,15 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {ALPHABET,toTrits} from "../src/ternary.js";
-import {WAVELENGTHS_NM,STATES,encodeSymbol,compareImplementationCosts,spectralConfusion,amdahl,evaluateScenario} from "../bai-toan-2/core.js";
+import {WAVELENGTHS_NM,STATES,encodeSymbol,compareImplementationCosts,spectralConfusion,amdahl,evaluateScenario,radixEconomy} from "../bai-toan-2/core.js";
 
 const read=p=>readFileSync(new URL(p,import.meta.url),"utf8");
+test("Bài toán 2 · base 3 is optimal integer radix only under r/ln r cost assumption",()=>{
+  assert.ok(radixEconomy(3)<radixEconomy(2));
+  assert.ok(radixEconomy(3)<radixEconomy(4));
+  assert.ok(Math.abs(radixEconomy(Math.E)-Math.E)<1e-10);
+  assert.throws(()=>radixEconomy(1));
+});
 test("Bài toán 2 · whole Base27 alphabet maps uniquely to three optical wavelength choices",()=>{
   assert.deepEqual(STATES,[-1,0,1]);
   assert.deepEqual(WAVELENGTHS_NM,{"-1":1550,"0":1310,"1":1064});
@@ -68,7 +74,7 @@ test("Bài toán 2 · static HTML, references and page tabs exist",()=>{
   assert.match(p2,/href="\.\.\/"/);
   assert.match(p2,/Long Ngo phát triển/);
   assert.match(p2,/Non-Commercial License/);
-  for(const id of ["costChart","base27Symbol","confusionMatrix","amdahlCore","downloadScenario","verifyModel"]){
+  for(const id of ["radixEconomyRows","costChart","base27Symbol","confusionMatrix","amdahlCore","downloadScenario","verifyModel"]){
     assert.ok(p2.includes('id="'+id+'"'),"Missing UI element: "+id);
   }
   assert.match(p2,/40× = giả định/);
