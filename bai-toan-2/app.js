@@ -1,10 +1,18 @@
 import {ALPHABET,toTrits,fromTrits} from "../src/ternary.js";
-import {STATES,WAVELENGTHS_NM,encodeSymbol,compareImplementationCosts,spectralConfusion,amdahl,evaluateScenario} from "./core.js";
+import {STATES,WAVELENGTHS_NM,encodeSymbol,compareImplementationCosts,spectralConfusion,amdahl,evaluateScenario,radixEconomy} from "./core.js";
 
 const $=id=>document.getElementById(id);
 const fmt=(n,dec=2)=>Number(n).toLocaleString("vi-VN",{maximumFractionDigits:dec});
 const percent=n=>fmt(100*n,3)+"%";
 const readNumber=id=>Number($(id).value);
+// Mathematical table: conditional radix economy E(r) = r/ln(r).
+$("radixEconomyRows").replaceChildren(...[2,3,4,5,6,8].map(r=>{
+  const tr=document.createElement("tr");
+  for(const value of [String(r),Number(radixEconomy(r)).toLocaleString("vi-VN",{maximumFractionDigits:4}),r===3?"Tối ưu (trong mô hình)":"Đối chứng"]){
+    const td=document.createElement("td");td.textContent=value;if(r===3)td.className="hit";tr.append(td);
+  }
+  return tr;
+}));
 const scenario=()=>({
   symbol:ALPHABET[readNumber("base27Symbol")],
   bitCost:readNumber("bitCost"),ternaryPerBitRatio:readNumber("ratio"),
