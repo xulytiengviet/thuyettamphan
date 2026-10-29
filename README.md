@@ -2,7 +2,7 @@
 
 **CVNSS4.0 → Base27 → Ternary AI | Lossless Proof Laboratory**
 
-Dự án kiểm chứng khoa học bằng mã nguồn mở: (1) chứng minh song ánh 27 ký hiệu và 3 trit cân bằng; (2) kiểm toán CVNSS4.0 v5.0.0-audit-safe và 56 nhóm nhập nhằng; (3) chứng minh phép mã hóa *mở rộng* không mất mát bằng sidecar sửa sai và SHA-256; (4) mô phỏng RUL proof-carrying, phân biệt verifier thực và mô phỏng giao diện; (5) thiết kế benchmark so với tokenizer BPE, byte-level, patching, BitNet.
+Dự án mã nguồn công khai phục vụ nghiên cứu, kiểm chứng khoa học: (1) chứng minh song ánh 27 ký hiệu và 3 trit cân bằng; (2) kiểm toán CVNSS4.0 v5.0.0-audit-safe và 56 nhóm nhập nhằng; (3) chứng minh phép mã hóa *mở rộng* không mất mát bằng sidecar sửa sai và SHA-256; (4) mô phỏng RUL proof-carrying, phân biệt verifier thực và mô phỏng giao diện; (5) thiết kế benchmark so với tokenizer BPE, byte-level, patching, BitNet.
 
 > **Giới hạn nghiên cứu**: Song ánh Base27/3-trit là định lý toán học. CVNSS4.0 đơn thuần không đơn ánh trên mọi văn bản. Round-trip của một gói chứa sidecar không chứng minh CVNSS4.0 tự thân lossless. Chưa có kết quả huấn luyện LLM hoặc đo điện năng chứng minh ưu thế so BPE.
 
@@ -14,12 +14,12 @@ Mở `index.html` bằng HTTP local (`python -m http.server 8000`) hoặc GitHub
 npm test  # Chạy test Node.js: ánh xạ, phản ví dụ, sidecar, fuzz round-trip
 ```
 
-Trang GitHub Pages dự kiến: https://xulytiengviet.github.io/thuyettamphan/
+Website GitHub Pages: https://xulytiengviet.github.io/thuyettamphan/ (xem [lịch sử triển khai](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/pages.yml) để kiểm tra phiên bản đang xuất bản).
 
 ## Cấu trúc
 
 - `index.html` — giao diện nghiên cứu tiếng Việt, mô phỏng và phòng thí nghiệm.
-- `assets/style.css` — hệ thiết kế responsive dark neon.
+- `assets/style.css` — hệ giao diện sáng chuyên nghiệp, tương thích máy tính, máy tính bảng và điện thoại.
 - `src/ternary.js` — Base27 / tam phân cân bằng / sidecar / kiểm thử có thể nhập bằng Node và trình duyệt.
 - `src/app.js` — trình điều khiển UI, mô phỏng sinh token và chứng cứ.
 - `vendor/cvnss4-v5.js` — bộ chuyển đổi CVNSS4.0 5.0.0-audit-safe từ tác giả cung cấp, giữ đầy đủ nguyên gốc.
@@ -55,3 +55,15 @@ Trang web đã có `index.html` trong root, nhưng GitHub Pages của repository
 4. Sau khi deployment SUCCESS, mở https://xulytiengviet.github.io/thuyettamphan/.
 
 Workflow Pages để ở chế độ chạy thủ công nhằm tránh các lần thất bại lặp lại trước khi Pages được bật; workflow kiểm chứng bằng Node/RUL vẫn tự chạy trên push.
+
+## Giao diện cập nhật — Bài toán 1
+
+Bản giao diện **nền sáng** do **Long Ngo phát triển**, có biểu đồ tương tác **nhị phân ↔ tam phân** cho số lượng ký hiệu từ 2 đến 81. Biểu đồ minh họa ba tiêu chí độc lập: độ dài mã cố định, không gian trạng thái khả dụng, và tỷ lệ sử dụng. Tại N = 27, kết quả là **5 bit → 32 mã (84,375%)** so với **3 trit → 27 mã (100%)**. Các giá trị này thuộc chứng minh biểu diễn logic; không phải dữ liệu đo năng lượng phần cứng hay hiệu suất LLM.
+
+## Tác giả và giấy phép
+
+**Long Ngo phát triển. Giấy phép phi thương mại · Non-Commercial License.**
+
+Các phần mã nguồn, giao diện và tài liệu **do dự án tự sở hữu** được phân phối theo [LICENSE-NONCOMMERCIAL.md](./LICENSE-NONCOMMERCIAL.md); việc sử dụng thương mại đòi hỏi giấy phép riêng bằng văn bản. Đây là mã nguồn được công bố với hạn chế phi thương mại, **không phải giấy phép nguồn mở theo định nghĩa OSI**.
+
+Các thành phần có nguồn gốc bên thứ ba **không bị đổi giấy phép**: thư viện RUL vẫn theo **MIT OR Apache-2.0**; bộ chuyển đổi CVNSS4.0 trong `vendor/` vẫn cần tuân thủ quyền và điều khoản nguyên gốc tương ứng. Tài liệu giấy phép không chuyển quyền sở hữu các thành phần đó cho dự án.
