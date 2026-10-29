@@ -110,6 +110,11 @@
 <div class="section-head"><div><div class="section-kicker">II / LOSSLESS PROOF LAB</div><h2>Kiểm chứng CQN ↔ CVNSS4.0 ↔ Base27 ↔ 3 trit</h2><p class="sub">Bộ chuyển đổi v5 có đồ thị ứng viên giải mã và chính sách canonical; do ánh xạ nhiều-một, CQN → CVNSS → CQN không lossless tuyệt đối. Thử gói mở rộng với sidecar thay đổi Unicode và SHA-256.</p></div><span class="status measured">KIỂM THỬ TẠI TRÌNH DUYỆT</span></div>
 <div class="panel">
 <div class="pipeline" aria-label="Pipeline minh họa"><div class="pipe"><b>Chữ Quốc Ngữ</b><small>Unicode UTF-8</small></div><div class="pipe"><b>CVNSS4.0 v5</b><small>CQN → CVSS</small></div><div class="pipe"><b>Base27 / Trit</b><small>Direct hoặc UTF8-pair</small></div><div class="pipe"><b>Sidecar</b><small>Unicode edits</small></div><div class="pipe"><b>SHA-256</b><small>So byte gốc</small></div></div>
+<label for="proofMode">Định dạng gói chứng cứ</label>
+<select id="proofMode" aria-label="Chọn định dạng gói CVNSS lossless">
+  <option value="lp2" selected>LP2 · Base27 escape cục bộ + Unicode sidecar (đề xuất)</option>
+  <option value="lp1">LP1 · Chế độ UTF-8 toàn câu khi gặp ký tự ngoại lệ (đối chứng)</option>
+</select>
 <label for="cqnInput">Nhập văn bản tiếng Việt để kiểm chứng (dữ liệu xử lý tại trình duyệt)</label>
 <textarea id="cqnInput" spellcheck="false">Chào bạn! Có vẻ như bạn đang rất hào hứng với tiếng Việt và một chủ đề công nghệ cực kỳ thú vị: Điện toán tam phân.</textarea>
 <div class="controls"><button class="button main" id="proofRun">▶ Chạy kiểm chứng</button><button class="button" id="counterexampleBtn">Thử phản ví dụ</button><button class="button" id="sentenceBtn">Ví dụ câu tiếng Việt</button><button class="button mint" id="copyPacketBtn">⧉ Copy gói chứng cứ</button></div>
