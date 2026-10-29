@@ -85,3 +85,20 @@ Thử nghiệm chẩn đoán trong CI (không phải kết quả LLM) đã ghi n
 
 Đây là **số liệu chẩn đoán của corpus cực nhỏ**. Chưa có kết quả đo việc huấn luyện mô hình, inference FLOPs, chất lượng tiếng Việt hoặc joule trên phần cứng. Xem [giao thức bốn trụ](docs/FOUR_PILLARS_PROTOCOL.md), [kiến trúc VVTLM](docs/TERNARY_LLM_ARCHITECTURE.md) và [CI / artifact kiểm chứng](https://github.com/xulytiengviet/thuyettamphan/actions/workflows/proof.yml) trước khi trích dẫn.
 
+
+## Bài toán 2 — Nút thắt 40× và tam phân quang học
+
+**Trang tương tác:** [Bài toán 2 — N-Radix, WDM và giới hạn phần cứng](https://xulytiengviet.github.io/thuyettamphan/bai-toan-2/).
+
+Thư mục mới [`bai-toan-2/`](bai-toan-2/) gồm trang độc lập, CSS responsive, bộ mô phỏng và tài liệu nghiên cứu đối chiếu PDF của Christopher Riner, *Wavelength-Division Ternary Computing II: The N-Radix Optical AI Accelerator*.
+
+- Tái sử dụng mô hình ký hiệu Base27 ↔ 3 trit từ [Bài toán 1](https://xulytiengviet.github.io/thuyettamphan/).
+- Thử nhiều giả định chi phí transistor, bao gồm **kịch bản 40×** trong bài báo và ví dụ **SRAM 6T/bit so với 40T/trit**. Không khẳng định một bit ổn định chỉ cần 1 transistor.
+- Mã trit bằng ba bước sóng hồng ngoại **1550 / 1310 / 1064 nm**.
+- Thay nhiễu Gaussian σ và lệch bước sóng Δλ để xem ma trận nhầm lẫn; chỉ là mô hình phân loại, **không phải Meep FDTD**.
+- Kịch bản Amdahl: f=50% công việc được tăng tốc 9× cho dự phóng 1,8×, và mô phỏng giới hạn WDM với giả định tận dụng kênh.
+- Xuất JSON của các giả định đầu vào, kết quả và giới hạn mô hình; kiểm thử tự động qua `tests/problem2.test.mjs`.
+
+**Đánh giá khoa học:** lợi ích tính toán quang học là hướng nghiên cứu có cơ sở, nhưng con số 40× không phải định luật phổ quát; chi phí quang học tổng cộng phụ thuộc laser, điều chế, mux/demux, detector, ADC/DAC, nhiệt và nhiễu xuyên kênh. Các con số 148 PFLOPS/400W là dự phóng của bài báo, chưa phải benchmark xác minh độc lập hoặc kết quả chip của phòng thí nghiệm.
+
+Xem [`bai-toan-2/README.md`](bai-toan-2/README.md) để đọc nguồn, phương trình và giới hạn nghiên cứu.
