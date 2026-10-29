@@ -10,7 +10,7 @@
 <body>
 <header><div class="navbar">
 <a class="brand" href="#dau"><span class="brandmark">3</span><span><b>THUYẾT TAM PHÂN</b><small>Long Ngo phát triển</small></span></a>
-<nav class="navlinks" aria-label="Điều hướng"><a href="#dinh-ly">Định lý</a><a href="#binary-ternary">So sánh nhị / tam phân</a><a href="#lossless">Lossless Lab</a><a href="#rul">RUL Proof</a><a href="#tokenizer">Tokenizer</a><a href="#hardware">Edge &amp; Chip</a><a href="#benchmark">Benchmark</a><a href="#nguon">Nguồn</a></nav>
+<nav class="navlinks" aria-label="Điều hướng"><a href="#four-evals">4 phép đánh giá</a><a href="#dinh-ly">Định lý</a><a href="#binary-ternary">So sánh nhị / tam phân</a><a href="#lossless">Lossless Lab</a><a href="#rul">RUL Proof</a><a href="#tokenizer">Tokenizer</a><a href="#hardware">Edge &amp; Chip</a><a href="#benchmark">Benchmark</a><a href="#nguon">Nguồn</a></nav>
 </div></header>
 <main class="app">
 <section id="dau" class="hero">
@@ -201,6 +201,101 @@
 <div><div class="comparison"><div class="compareblock"><b>Điện áp lý tưởng</b><strong id="chipVoltage">0 V</strong></div><div class="compareblock"><b>Xác suất giải mã sai</b><strong id="chipError">—</strong></div></div><div id="chipSpectrum" class="readout" style="margin-top:10px">Đang tính mô hình...</div></div>
 </div>
 </div>
+</section>
+
+<section id="four-evals" class="section four-eval-lab">
+  <div class="section-head">
+    <div>
+      <div class="section-kicker">VI / BỐN PHÉP ĐÁNH GIÁ · REPRODUCIBILITY PROTOCOL</div>
+      <h2>Phòng đánh giá 4 trụ cột: toán học → lossless → tokenizer → LLM</h2>
+      <p class="sub">Sử dụng bộ chuyển đổi thật, tập câu tiếng Việt công khai có phân tách train/holdout và trình xác thực hồ sơ huấn luyện. <b>Kết quả đo chẩn đoán không được đồng nhất với lợi ích thực nghiệm của LLM.</b></p>
+    </div>
+    <span class="status measured">LAB PROTOCOL V1</span>
+  </div>
+  <div class="panel">
+    <div class="eval-toolbar">
+      <div><h3>Bộ kiểm chứng có thể tái lập</h3><p class="mathnote">Tập corpus mẫu có nguồn gốc công khai trong repository · không tải dữ liệu người dùng lên máy chủ</p></div>
+      <div class="controls">
+        <button class="button main" id="runFourEvals" type="button">▶ Chạy P1–P3 với dữ liệu thực</button>
+        <button class="button" id="exportEvaluation" type="button" disabled>↓ Xuất báo cáo JSON</button>
+        <a class="button ghost" href="data/vietnamese_eval_v1.json" target="_blank" rel="noopener">Xem corpus</a>
+      </div>
+    </div>
+    <div id="fourEvalMessage" class="note" role="status" aria-live="polite">P1 có chứng minh toán học riêng; nhấn Chạy để đánh giá P2/P3 trên dữ liệu công khai. P4 chỉ nhận kết quả huấn luyện được cung cấp, không tự tạo số liệu AI.</div>
+    <div class="evaluation-grid">
+      <article class="eval-card">
+        <div class="eval-card-top"><span class="eval-number">01</span><span class="status proven">ĐỊNH LÝ</span></div>
+        <h3>Song ánh 27 ↔ 3 trit</h3>
+        <p class="eval-desc">Duyệt hết 27 trạng thái, xác thực không trùng, phép giải mã nghịch đảo và giới hạn số chữ số.</p>
+        <div class="eval-value" id="eval1Value">27/27</div>
+        <div class="eval-detail" id="eval1Detail">27 bộ trit khác nhau · 5 bit vs 3 trit</div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-card-top"><span class="eval-number">02</span><span class="status measured">KIỂM THỬ CÓ GIỚI HẠN</span></div>
+        <h3>Unicode lossless và sidecar</h3>
+        <p class="eval-desc">Đối chiếu byte UTF-8, phản ví dụ nhập nhằng, LP1 và escape cục bộ LP2, SHA-256 và tỷ lệ overhead.</p>
+        <div class="eval-value" id="eval2Value">Chưa chạy</div>
+        <div class="eval-detail" id="eval2Detail">Chỉ báo cáo số ca đã kiểm và trường hợp thất bại.</div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-card-top"><span class="eval-number">03</span><span class="status measured">HOLDOUT ĐO THẬT</span></div>
+        <h3>Chi phí tokenizer và transport</h3>
+        <p class="eval-desc">So UTF-8 byte, mini byte-BPE huấn luyện trên corpus mẫu, CVNSS+BPE mẫu và Base27 LP1/LP2.</p>
+        <div class="eval-value" id="eval3Value">Chưa chạy</div>
+        <div class="eval-detail" id="eval3Detail">Không thay thế BPE32K hoặc Byte Latent Transformer.</div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-card-top"><span class="eval-number">04</span><span class="status pending">CHỜ DỮ LIỆU HUẤN LUYỆN</span></div>
+        <h3>LLM trọng số tam phân</h3>
+        <p class="eval-desc">Kiểm tra hồ sơ đo từ ít nhất 3 seed mỗi mô hình: chất lượng, FLOPs/byte, joule/byte, latency và RAM.</p>
+        <div class="eval-value" id="eval4Value">Chưa có kết quả</div>
+        <div class="eval-detail" id="eval4Detail">Chưa thể tuyên bố CVNSS tối ưu hơn BPE.</div>
+      </article>
+    </div>
+    <div class="layout2" style="margin-top:18px">
+      <div class="eval-detail-pane">
+        <h3>Phân tích P2 — Lossless có và không có sidecar</h3>
+        <div id="evalLosslessSummary" class="readout">Chưa chạy.</div>
+        <p class="mathnote">LP2 tránh chuyển toàn văn bản thành cặp chữ số UTF-8 khi có dấu câu. Chi phí gói JSON có thể lớn hơn bản gốc; ưu thế nén chưa được xác lập.</p>
+      </div>
+      <div class="eval-detail-pane">
+        <h3>Phân tích P3 — Tokenizer trên tập holdout</h3>
+        <div id="evalTokenizerSummary" class="readout">Chưa chạy.</div>
+        <p class="mathnote">Mini BPE dùng bộ merge tự huấn luyện chỉ trên split train; tỷ lệ token thu được là thực nghiệm chẩn đoán trên corpus nhỏ, không phải kết quả suy luận mô hình.</p>
+      </div>
+    </div>
+    <details>
+      <summary>Phương pháp luận P1–P3: corpus, phiên bản, phản ví dụ, overhead, tính khả nghịch</summary>
+      <p><strong>P1:</strong> duyệt toàn miền bảng mã 27 trạng thái. <strong>P2:</strong> cùng câu kiểm thử, so byte gốc với byte phục hồi; đối chiếu hai chế độ LP1 và LP2, tính cả sidecar. <strong>P3:</strong> chia train/holdout cố định, dùng mini-BPE byte-level huấn luyện từ đầu trên split train, giữ test độc lập và so byte/chuỗi; gói Base27 vẫn phải tính phần escape/sidecar. Các kiểm tra này chưa đo FLOPs hoặc joule của LLM.</p>
+      <p>Tài liệu: <a href="docs/CHUNG_MINH_BAI_TOAN_1.md" target="_blank" rel="noopener">Bài toán 1</a> · <a href="https://github.com/xulytiengviet/thuyettamphan/actions/workflows/proof.yml" target="_blank" rel="noopener">Kiểm thử GitHub Actions</a>.</p>
+    </details>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="section-head">
+      <div><h3>Phép đánh giá 4 — Cổng kiểm định bằng chứng LLM</h3><p class="sub">Nhập hồ sơ thử nghiệm JSON đã đo trên thiết bị thực. Trình kiểm tra chỉ đánh giá <b>định dạng, tính so sánh được và ngưỡng mục tiêu</b>; không xác minh độc lập số liệu người dùng nhập.</p></div>
+      <span class="status pending">KHÔNG TẠO SỐ LIỆU GIẢ</span>
+    </div>
+    <div class="layout2">
+      <div>
+        <label for="llmEvidenceInput">Hồ sơ thực nghiệm (JSON)</label>
+        <textarea id="llmEvidenceInput" class="evidence-input" spellcheck="false" placeholder='{"schema":"vt-llm-eval/v1","baseline_id":"M0","arms":[...]}'></textarea>
+        <div class="controls">
+          <button class="button main" type="button" id="validateLLM">Kiểm tra chứng cứ P4</button>
+          <button class="button" type="button" id="loadEvidenceTemplate">Tải cấu trúc mẫu</button>
+        </div>
+      </div>
+      <div>
+        <h4>Điều kiện chấp nhận hồ sơ</h4>
+        <div class="eval-criteria">
+          <div><b>≥ 3 seed</b><small>Thực nghiệm lặp lại cho mỗi phương án</small></div>
+          <div><b>± 5%</b><small>Ngân sách train FLOPs và tham số khớp baseline</small></div>
+          <div><b>≤ −1 pp</b><small>Ngưỡng suy giảm điểm chất lượng tối đa</small></div>
+          <div><b>≥ 20%</b><small>Tiết kiệm inference FLOPs/byte và joule/byte (mục tiêu, không phải kết quả)</small></div>
+        </div>
+        <div class="readout" id="llmEvidenceResult" aria-live="polite">Chưa có hồ sơ thử nghiệm LLM. Kết luận nghiên cứu về lợi thế tam phân vẫn là giả thuyết.</div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="benchmark" class="section">
