@@ -92,6 +92,34 @@ function updateEstimate(){
 ["bpeLength","charRatio","embeddingDim"].forEach(id=>$(id).addEventListener("input",updateEstimate));
 updateEstimate();
 
+
+/** Analytic three-level voltage discriminator (Gaussian assumption only). */
+function normalCdf(x) {
+  if(x<0)return 1-normalCdf(-x);
+  const t=1/(1+0.2316419*x);
+  const d=0.3989422804*Math.exp(-x*x/2);
+  return 1-d*t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));
+}
+function chipNoiseModel(){
+  const trit=+$("chipSymbol").value, sigma=+$("chipNoise").value;
+  const low=normalCdf((-0.5-trit)/sigma), high=normalCdf((0.5-trit)/sigma);
+  const pMinus=low, pZero=high-low, pPlus=1-high;
+  const actual=[pMinus,pZero,pPlus],correct=actual[trit+1];
+  const error=Math.max(0,1-correct),fmt=v=>(v*100).toFixed(3).replace(".",",")+"%";
+  set("chipNoiseLabel",sigma.toFixed(2).replace(".",",")+" V");
+  set("chipVoltage",`${trit>0?"+":""}${trit} V`);
+  set("chipError",fmt(error));
+  set("chipSpectrum",`Trạng thái phát : ${trit}     | σ = ${sigma} V
+P(giải mã −1) : ${fmt(pMinus)}
+P(giải mã  0) : ${fmt(pZero)}
+P(giải mã +1) : ${fmt(pPlus)}
+Đúng theo mô hình: ${fmt(correct)}
+Ngưỡng: −0,5 V / +0,5 V
+KHÔNG phải đo đạc chip hay suy luận năng lượng.`);
+}
+["chipSymbol","chipNoise"].forEach(id=>$(id).addEventListener("input",chipNoiseModel));
+chipNoiseModel();
+
 async function browserProofSuite(){
   try{
     const p=mappingProof(),samples=[
