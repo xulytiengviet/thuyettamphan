@@ -1,7 +1,7 @@
 /**
  * Thuyet Tam Phan — Base27 / balanced trit / lossless CVNSS4.0 proof layer.
  * Alphabet: SPACE=0, A=1, ..., Z=26 (compatible with base27-cvnss.github.io).
- * License: MIT. The CVNSS converter is kept separately as the supplied vendor file.
+ * Original project's terms: LICENSE-NONCOMMERCIAL.md. Vendor CVNSS retains its own terms.
  *
  * The sidecar is NOT a claim that plain CVNSS4.0 is injective.
  * It describes edits required to recover the original Unicode scalar sequence.
