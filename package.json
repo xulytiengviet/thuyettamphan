@@ -1,6 +1,7 @@
 {
   "name":"thuyettamphan",
   "private":true,
+  "license":"SEE LICENSE-NONCOMMERCIAL.md",
   "version":"1.0.0",
   "type":"module",
   "description":"CVNSS4.0–Base27–Ternary AI · scientific verification laboratory",
