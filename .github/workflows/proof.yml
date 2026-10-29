@@ -1,0 +1,25 @@
+name: Proof Lab · Codec and RUL CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  node-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exhaustive mapping / converter round-trip / seeded fuzz
+        run: npm test
+  rul-native-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Actual RUL 128-bit binary graph verifier and differential engine
+        run: cargo run --release --manifest-path rul-bridge/Cargo.toml
