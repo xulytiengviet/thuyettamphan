@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8fc">
+  <meta name="description" content="Bài toán 2 — kiểm định giả thuyết hình phạt phần cứng 40× của điện toán tam phân và mô phỏng quang học ba bước sóng, Base27–CVNSS4.0.">
+  <title>Bài toán 2 · Tam phân quang học &amp; nút thắt 40× | Thuyết Tam Phân</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <nav class="nav shell" aria-label="Điều hướng các bài toán">
+    <a href="../" class="identity"><span class="identity-mark">3</span><span>THUYẾT TAM PHÂN <small>Long Ngo phát triển</small></span></a>
+    <div class="tabbar" role="navigation" aria-label="Các bài toán"><a class="tab" href="../">Bài toán 1 <span>Ngôn ngữ &amp; Base27</span></a><a class="tab active" aria-current="page" href="./">Bài toán 2 <span>Quang học &amp; phần cứng</span></a></div>
+    <a href="https://github.com/xulytiengviet/thuyettamphan/tree/main/bai-toan-2" class="github" target="_blank" rel="noopener">Mã nguồn ↗</a>
+  </nav>
+</header>
+<main class="shell">
+<section class="hero" id="gioi-thieu">
+  <div class="hero-copy">
+    <p class="eyebrow">CHƯƠNG II · PHÒNG THÍ NGHIỆM CÔNG NGHỆ TAM PHÂN</p>
+    <h1>Phá vỡ <span>“nút thắt 40×”</span> bằng quang học?</h1>
+    <p class="intro">Từ trit điện tử đến ba bước sóng quang học: khảo sát các điều kiện để một kiến trúc tam phân có thể cạnh tranh với nhị phân — và cầu nối <b>CVNSS4.0 → Base27 → 3 trit → tín hiệu quang.</b></p>
+    <div class="flagline"><span class="pill">40× = giả định của nghiên cứu N-Radix</span><span class="pill teal">27 = 3³ được chứng minh</span><span class="pill orange">Chưa có chip hoặc benchmark đo độc lập</span></div>
+    <div class="hero-actions"><a class="btn primary" href="#chi-phi">Bắt đầu mô phỏng <span>↗</span></a><a class="btn outline" href="#kiem-dinh">Đánh giá bằng chứng</a></div>
+  </div>
+  <div class="hero-art" role="img" aria-label="Mô hình ba bước sóng khác nhau biểu diễn -1, 0 và +1 theo bài báo N-Radix">
+    <div class="hero-art-head"><span>WAVELENGTH-DIVISION TRIT</span><span>3 TRẠNG THÁI · 3 BƯỚC SÓNG</span></div>
+    <svg viewBox="0 0 570 300" aria-hidden="true" class="light-visual">
+      <defs><linearGradient id="laneBg" x1="0" x2="1"><stop stop-color="#edf5ff"/><stop offset="1" stop-color="#d9eff4"/></linearGradient></defs>
+      <rect x="10" y="13" width="550" height="275" rx="24" fill="url(#laneBg)"/>
+      <g fill="#153d68" font-family="ui-monospace,monospace" font-size="17" font-weight="700"><text x="34" y="81">−1</text><text x="34" y="153">0</text><text x="34" y="224">+1</text></g>
+      <g opacity=".72" stroke-width="3"><path d="M 88 70 H 494" stroke="#dc7181"/><path d="M 88 143 H 494" stroke="#1b87ab"/><path d="M 88 215 H 494" stroke="#825bc7"/></g>
+      <g fill="none" stroke-width="3"><path d="M90 70 C170 10 235 130 319 70 S448 10 494 70" stroke="#cf596b"/><path d="M90 143 C160 83 236 202 320 143 S448 85 494 143" stroke="#197eaf"/><path d="M90 215 C165 154 242 275 320 215 S450 155 494 215" stroke="#7a57c6"/></g>
+      <g font-size="14" font-weight="700" fill="#28527d"><text x="430" y="45">1550 nm</text><text x="430" y="118">1310 nm</text><text x="430" y="190">1064 nm</text></g>
+      <g fill="#fff" stroke="#bdd8e8"><rect x="160" y="253" rx="12" width="245" height="27"/></g><text x="177" y="272" font-size="12" fill="#365571">MÔ PHỎNG LOGIC · KHÔNG PHẢI ẢNH THỰC</text>
+    </svg>
+    <p>Chú ý: cả 1064, 1310 và 1550 nm đều thuộc miền hồng ngoại; màu sắc trong sơ đồ chỉ để phân biệt đường tín hiệu.</p>
+  </div>
+</section>
+
+<div class="quickstats" aria-label="Phân loại các kết luận">
+  <article><span>01 / Kết luận toán học</span><strong>1 trit ≈ 1,585 bit</strong><small>Thông tin tối đa mỗi chữ số</small></article>
+  <article><span>02 / Kịch bản phần cứng</span><strong>40×</strong><small>Giả định tác giả N-Radix nêu, không phổ quát</small></article>
+  <article><span>03 / Bài báo N-Radix</span><strong>1550 / 1310 / 1064</strong><small>nm · ánh xạ −1 / 0 / +1</small></article>
+  <article><span>04 / Mức trưởng thành</span><strong>Mô hình &amp; dự phóng</strong><small>Chưa chứng minh tốc độ AI thực</small></article>
+</div>
+
+<section class="section" id="kiem-dinh">
+  <div class="section-title"><span class="label">01 · THẨM ĐỊNH NGUỒN</span><h2>“40 transistor” có phải định luật vật lý?</h2><p>Bài báo <i>Wavelength-Division Ternary Computing II: The N-Radix Optical AI Accelerator</i> của Christopher Riner nêu giả định chi phí phần cứng tam phân khoảng 40× so với nhị phân. Nhưng số transistor thay đổi theo <b>loại cổng, ô nhớ, công nghệ chế tạo và yêu cầu nhiễu</b>.</p></div>
+  <div class="threecards">
+    <article class="card"><span class="tag source">Tác giả công bố</span><h3>Giả định “40×”</h3><p>Bài báo đặt mức chi phí này ở phần mở đầu khi mô tả rào cản transistor. Đây là <b>tiền đề nghiên cứu</b>, chưa phải phép đo phổ quát 40 transistor cho mọi trit.</p><small>N-Radix, trang 1 · mục I, II-B.</small></article>
+    <article class="card"><span class="tag verified">Kiến thức mạch điện</span><h3>Không phải “một bit = một transistor”</h3><p>Một transistor có thể hoạt động như công tắc, nhưng cổng đảo CMOS thường gồm 2 transistor, còn ô nhớ SRAM 6T dùng 6 transistor. Các mạch tam phân có nhiều cách thực hiện khác nhau.</p><small>Cần so cùng chức năng: inverter, flip-flop, ô nhớ hoặc phép tính.</small></article>
+    <article class="card"><span class="tag caution">Cần thực nghiệm</span><h3>Quang học không miễn phí</h3><p>Laser, điều chế, ghép/tách WDM, detector, ADC/DAC, điều khiển nhiệt, suy hao và nhiễu xuyên kênh đều góp chi phí. Số kênh tăng có thể làm chi phí tổng tăng.</p><small>Không suy ra quang học hiệu quả hơn chỉ từ mật độ lý thuyết.</small></article>
+  </div>
+  <div class="formula">R<sub>chi phí</sub> = C<sub>trit</sub>/C<sub>bit</sub> <span>·</span>  &nbsp;Thực tế cần so <b>chi phí/bit thông tin</b>, không chỉ chi phí/ký hiệu.</div>
+</section>
+
+<section class="section" id="chi-phi">
+  <div class="section-title"><span class="label">02 · MÔ PHỎNG CHI PHÍ</span><h2>Khi nào hình phạt tam phân biến mất?</h2><p>Đổi các giả định và xem kết quả với <strong>27 trạng thái</strong> (5 bit nhị phân hoặc 3 trit cân bằng). Đơn vị chi phí bên dưới chỉ là <b>đơn vị quy ước</b>, không phải transistor/µm²/joule đo được.</p></div>
+  <div class="cols">
+    <article class="card panel">
+      <div class="panel-top"><h3>Tham số thiết kế giả định</h3><span class="tag simulation">MÔ PHỎNG</span></div>
+      <label for="preset">Kịch bản so sánh</label>
+      <select id="preset"><option value="40">Giả định 40×/trit so với bit</option><option value="6t40t">Ví dụ ô nhớ: 6T/bit và 40T/trit</option><option value="custom">Tùy chỉnh</option></select>
+      <label for="bitCost">Chi phí tham chiếu một bit <output id="bitCostV">1</output></label><input id="bitCost" type="range" min=".5" max="12" step=".5" value="1">
+      <label for="ratio">Tỷ số C<sub>trit điện tử</sub> / C<sub>bit</sub> <output id="ratioV">40×</output></label><input id="ratio" type="range" min="1" max="80" step=".5" value="40">
+      <label for="opticalShared">Chi phí quang dùng chung <output id="opticalSharedV">3</output></label><input id="opticalShared" type="range" min="0" max="40" step=".5" value="3">
+      <label for="opticalPerTrit">Chi phí quang cho mỗi trit <output id="opticalPerTritV">1,2</output></label><input id="opticalPerTrit" type="range" min=".1" max="30" step=".1" value="1.2">
+      <button id="resetCost" class="btn secondary" type="button">Khôi phục kịch bản N-Radix</button>
+      <p class="aside">C<sub>quang</sub> = C<sub>chung</sub> + 3 × C<sub>mỗi trit</sub>; mô hình yêu cầu nêu rõ chi phí nguồn, bộ lọc và giao tiếp thay vì giả định chúng bằng 0.</p>
+    </article>
+    <article class="card panel">
+      <div class="panel-top"><h3>Chi phí biểu diễn 27 trạng thái</h3><span class="tag simulation">ĐƠN VỊ QUY ƯỚC</span></div>
+      <div class="barplot" id="costChart" aria-live="polite"></div>
+      <div class="twometrics"><div><span>Tam phân điện tử / nhị phân</span><strong id="elecRatio">—</strong></div><div><span>Quang học / nhị phân</span><strong id="optRatio">—</strong></div></div>
+      <p id="costFinding" class="finding">...</p>
+      <p class="aside">Biểu đồ không khẳng định chi phí chế tạo chip. Không nhân 40× với 1,585 rồi kết luận “tối ưu”: phải so cùng năng lực mã hóa và cùng chức năng.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="wavelength">
+ <div class="section-title"><span class="label">03 · CẦU NỐI CVNSS4.0–BASE27–TRIT–QUANG HỌC</span><h2>Một ký hiệu, ba trit, ba lựa chọn bước sóng</h2><p>Với bảng Base27 đã được chứng minh tại Bài toán 1, mỗi ký hiệu ánh xạ sang đúng một bộ ba trit. Trong mô hình của bài báo, <strong>mỗi trit</strong> chọn một trong ba bước sóng hồng ngoại. Ba trit được biểu diễn bằng <b>ba thời điểm hoặc ba kênh</b>, chứ không phải một photon gói cả ký hiệu.</p></div>
+ <div class="cols">
+  <article class="card panel">
+   <label for="base27Symbol">Chọn ký hiệu Base27</label><select id="base27Symbol"></select>
+   <div class="symbolresult"><div><span>Base27 d</span><strong id="symbolDigit">20</strong></div><div><span>Mã nhị phân</span><strong id="symbolBinary">10100</strong></div></div>
+   <div class="trit-grid" id="tritGrid" aria-live="polite"></div>
+   <div class="formula smaller">d = 13 + 9t₂ + 3t₁ + t₀</div>
+   <p class="aside">Bảng ánh xạ nguồn: −1 → 1550 nm; 0 → 1310 nm; +1 → 1064 nm. Đây là ánh xạ trong bài báo, không phải mạch quang đã được chế tạo trong dự án.</p>
+  </article>
+  <article class="card panel">
+    <h3>Sơ đồ khối truyền và nhận (định tính)</h3>
+    <div class="flow-diagram">
+      <div>Unicode → CVNSS4.0 <small>Cần xử lý nhập nhằng + sidecar</small></div>
+      <b>↓</b><div>Base27 → 3 trit <small>Bài toán 1: 27/27 trạng thái</small></div>
+      <b>↓</b><div>Bộ chọn λ + WDM <small>Chọn từng trit, ghép/tách tín hiệu quang</small></div>
+      <b>↓</b><div>Detector + bộ giải mã <small>Phải tính nhiễu, IO và tính toàn vẹn</small></div>
+    </div>
+    <p class="aside">Mạch quang là phương tiện mang tín hiệu và/hoặc thực thi phép toán; mã hóa Base27 không tự tạo ra lõi tính toán hay trọng số LLM.</p>
+  </article>
+ </div>
+</section>
+
+<section class="section" id="nhieu">
+ <div class="section-title"><span class="label">04 · PHÂN BIỆT BƯỚC SÓNG</span><h2>Mô phỏng nhiễu và sai lệch phổ</h2><p>Một mô hình xác suất đơn giản giả định bước sóng quan sát có nhiễu Gaussian và bộ thu phân loại theo ngưỡng giữa các tâm phổ. Không phải phép mô phỏng Maxwell/FDTD hay bằng chứng về thiết kế bộ lọc thực.</p></div>
+ <div class="cols">
+  <article class="card panel">
+    <label for="sigma">Độ lệch chuẩn nhiễu σ (nm) <output id="sigmaV">20</output></label><input id="sigma" type="range" min="1" max="180" step="1" value="20">
+    <label for="drift">Sai lệch phổ chung Δλ (nm) <output id="driftV">0</output></label><input id="drift" type="range" min="-160" max="160" step="2" value="0">
+    <div class="bigmetric"><span>Xác suất phân loại sai trung bình theo mô hình</span><strong id="opticalError">—</strong></div>
+    <p class="aside">Ngưỡng phát hiện giữa 1064/1310 nm là 1187 nm, và giữa 1310/1550 nm là 1430 nm. Giả định các trit có xác suất bằng nhau.</p>
+  </article>
+  <article class="card panel">
+    <h3>Ma trận nhầm lẫn P(dự đoán | trit thật)</h3>
+    <div class="tablewrap"><table class="matrix"><thead><tr><th>Trit thật</th><th>Dự đoán −1</th><th>Dự đoán 0</th><th>Dự đoán +1</th></tr></thead><tbody id="confusionMatrix"></tbody></table></div>
+    <p id="spectralFinding" class="finding">...</p>
+    <p class="aside">Trong thực tế còn có suy hao, nền nhiễu, xuyên kênh, giãn phổ, sai lệch cộng hưởng do nhiệt và tốc độ detector; ma trận chỉ minh họa tác động của hai tham số đang thay đổi.</p>
+  </article>
+ </div>
+</section>
+
+<section class="section" id="amdahl">
+  <div class="section-title"><span class="label">05 · DỰ PHÓNG HIỆU NĂNG</span><h2>Tại sao “9×” không đồng nghĩa “LLM nhanh 9×”?</h2><p>Bài báo dùng giả định phần cộng/trừ đạt 9× và áp dụng định luật Amdahl. Thử thay tỷ lệ công việc để thấy giới hạn. Kết quả hoàn toàn là <b>phép tính theo giả định</b>, chưa có phép đo trên một accelerator quang học đã chế tạo.</p></div>
+  <div class="cols">
+    <article class="card panel">
+      <label for="addFraction">Tỷ lệ phần công việc được tăng tốc f <output id="addFractionV">50%</output></label><input id="addFraction" type="range" min="0" max="100" value="50" step="5">
+      <label for="addSpeedup">Hệ số tăng tốc riêng phần ADD <output id="addSpeedupV">9×</output></label><input id="addSpeedup" type="range" min="1" max="12" value="9" step=".5">
+      <label for="wdmChannels">Số nhóm kênh WDM song song giả định <output id="wdmChannelsV">1</output></label><input id="wdmChannels" type="range" min="1" max="6" value="1" step="1">
+      <label for="systemUtilization">Mức tận dụng tổng hệ thống <output id="systemUtilizationV">100%</output></label><input id="systemUtilization" type="range" min="10" max="100" value="100" step="5">
+      <div class="formula smaller">S = 1 / [(1 − f) + f / S<sub>ADD</sub>]</div>
+    </article>
+    <article class="card panel">
+      <div class="bigmetric"><span>Hệ số Amdahl cho 1 luồng tính toán</span><strong id="amdahlCore">—</strong></div>
+      <div class="twometrics"><div><span>Giới hạn trên kênh song song</span><strong id="amdahlMax">—</strong></div><div><span>Kịch bản có mức tận dụng</span><strong id="amdahlEstimate">—</strong></div></div>
+      <p class="finding" id="amdahlFinding">...</p><p class="aside">Không được cộng dồn tự động hệ số WDM với throughput nếu bandwidth laser, SRAM, bộ biến đổi quang–điện, nguồn cấp hoặc làm mát là nút thắt. Chưa có phép đo inference LLM.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section" id="nguon">
+ <div class="section-title"><span class="label">06 · TÁI LẬP VÀ THẨM ĐỊNH</span><h2>Phân loại kết quả: toán học, tiền đề, mô phỏng, hay phép đo?</h2><p>Phòng thí nghiệm phân biệt nội dung được nêu trong PDF của tác giả với kiến thức mạch điện độc lập, mô hình minh họa và các phép đo thực nghiệm chưa có.</p></div>
+ <div class="card">
+   <div class="tablewrap"><table class="evidence"><thead><tr><th>Khẳng định</th><th>Loại bằng chứng</th><th>Đánh giá</th></tr></thead><tbody>
+   <tr><td>27 ký hiệu Base27 ↔ ba trit cân bằng</td><td><span class="tag verified">Định lý đã chứng minh</span></td><td>Song ánh 27 trạng thái; dùng lại <a href="../#dinh-ly">Bài toán 1</a>.</td></tr>
+   <tr><td>Mỗi trit mang log₂3 ≈ 1,585 bit</td><td><span class="tag verified">Thông tin lý thuyết</span></td><td>Thông tin tối đa mỗi chữ số; không phải đo điện năng.</td></tr>
+   <tr><td>40× transistor/trit so với bit</td><td><span class="tag source">Giả định của N-Radix</span></td><td>Không phổ quát; phải chỉ rõ loại mạch và công nghệ.</td></tr>
+   <tr><td>1550 / 1310 / 1064 nm</td><td><span class="tag source">Ánh xạ của tác giả</span></td><td>Chỉ định ba bước sóng; chưa xác minh bộ thu/mixer hoàn chỉnh.</td></tr>
+   <tr><td>9× ADD; ≈1,8× matmul</td><td><span class="tag simulation">Dự phóng Amdahl</span></td><td>Dựa trên giả định ADD 9× và chia công việc 50/50.</td></tr>
+   <tr><td>148 PFLOPS / 400W ở 960×960</td><td><span class="tag caution">Ước tính trong bài báo</span></td><td>Không phải benchmark chip chế tạo được đo độc lập.</td></tr>
+   <tr><td>FDTD 27×27, skew 39,3 fs; WDM isolation</td><td><span class="tag source">Báo cáo mô phỏng của tác giả</span></td><td>Không có phép tái lập Meep độc lập trong repository này.</td></tr>
+   <tr><td>Mô hình chi phí / nhiễu trên trang</td><td><span class="tag simulation">Mô phỏng JavaScript</span></td><td>Có mã nguồn, kiểm thử, phép tính kiểm tra và JSON xuất.</td></tr>
+   </tbody></table></div>
+   <div class="source-links">
+     <a href="https://doi.org/10.5281/zenodo.18437600" target="_blank" rel="noopener">Nghiên cứu nền của C. Riner (Zenodo) ↗</a>
+     <a href="https://github.com/buckbuilds/-wavelength-ternary-optical-computer" target="_blank" rel="noopener">Kho mã quang học tham chiếu (lưu trữ) ↗</a>
+     <a href="https://www.itu.int/epublications/publication/itu-t-g-suppl-39-2025-03-optical-system-design-and-engineering-considerations/en" target="_blank" rel="noopener">ITU-T · nhiễu xuyên kênh WDM ↗</a>
+     <a href="https://www.nature.com/articles/s41467-025-61288-x" target="_blank" rel="noopener">Nature Communications · demux thực nghiệm ↗</a>
+   </div>
+   <div class="action-row">
+     <button id="downloadScenario" type="button" class="btn primary">↓ Xuất kịch bản JSON</button>
+     <button id="verifyModel" type="button" class="btn secondary">✓ Kiểm tra bất biến mô hình</button>
+     <a href="../#four-evals" class="btn outline">Về 4 phép đánh giá của Bài toán 1</a>
+   </div>
+   <p id="verifyOutput" class="finding" aria-live="polite">Kiểm thử toàn bộ 27 ký hiệu và các bất biến số học được thực thi từ mã nguồn JavaScript/Node.js.</p>
+ </div>
+</section>
+<footer><span>© 2026 · <b>Long Ngo phát triển</b> · Thuyết Tam Phân · Bài toán 2</span><a href="../LICENSE-NONCOMMERCIAL.md">Giấy phép phi thương mại · Non-Commercial License</a></footer>
+</main>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
